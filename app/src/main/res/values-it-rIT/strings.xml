@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="navigation_drawer_open" translatable="false">Apri il drawer di navigazione</string>
-    <string name="navigation_drawer_close" translatable="false">Chiudi il drawer di navigazione</string>
-    <string name="action_settings" translatable="false">Impostazioni</string>
-    <string name="menu_gallery" translatable="false">Galleria</string>
-    <string name="menu_slideshow" translatable="false">Presentazione</string>
-    <string name="menu_home">Home</string>
+    <string name="navigation_drawer_open">Apri il drawer di navigazione</string>
+    <string name="navigation_drawer_close">Chiudi il drawer di navigazione</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="menu_inv">Inventario</string>
+    <string name="menu_status">Stato</string>
+    <string name="menu_scanner">Scanner</string>
 </resources>
