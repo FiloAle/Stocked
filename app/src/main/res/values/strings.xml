@@ -10,4 +10,6 @@
     <string name="menu_scanner">Scanner</string>
     <string name="menu_inv">Inventory</string>
     <string name="menu_status">Status</string>
+
+    <string name="fab_tooltip">Edit your inventory</string>
 </resources>

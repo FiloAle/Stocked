@@ -6,4 +6,5 @@
     <string name="menu_inv">Inventario</string>
     <string name="menu_status">Stato</string>
     <string name="menu_scanner">Scanner</string>
+    <string name="fab_tooltip">Modifica l\'inventario</string>
 </resources>
