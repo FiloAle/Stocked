@@ -1,4 +1,4 @@
-package com.stocked.ui.gallery
+package com.stocked.ui.status
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.stocked.R
 
-class GalleryFragment : Fragment() {
+class StatusFragment : Fragment() {
 
-    private lateinit var galleryViewModel: GalleryViewModel
+    private lateinit var statusViewModel: StatusViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        galleryViewModel =
-                ViewModelProvider(this).get(GalleryViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_inv, container, false)
-        val textView: TextView = root.findViewById(R.id.text_inv)
-        galleryViewModel.text.observe(viewLifecycleOwner, Observer {
+        statusViewModel =
+                ViewModelProvider(this).get(StatusViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_status, container, false)
+        val textView: TextView = root.findViewById(R.id.text_status)
+        statusViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root

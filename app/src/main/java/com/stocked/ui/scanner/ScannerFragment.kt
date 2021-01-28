@@ -1,4 +1,4 @@
-package com.stocked.ui.slideshow
+package com.stocked.ui.scanner
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.stocked.R
 
-class SlideshowFragment : Fragment() {
+class ScannerFragment : Fragment() {
 
-    private lateinit var slideshowViewModel: SlideshowViewModel
+    private lateinit var scannerViewModel: ScannerViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        slideshowViewModel =
-                ViewModelProvider(this).get(SlideshowViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_status, container, false)
-        val textView: TextView = root.findViewById(R.id.text_status)
-        slideshowViewModel.text.observe(viewLifecycleOwner, Observer {
+        scannerViewModel =
+                ViewModelProvider(this).get(ScannerViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_scanner, container, false)
+        val textView: TextView = root.findViewById(R.id.text_scanner)
+        scannerViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root

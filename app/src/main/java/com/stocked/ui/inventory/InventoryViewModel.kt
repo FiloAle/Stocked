@@ -1,10 +1,10 @@
-package com.stocked.ui.gallery
+package com.stocked.ui.inventory
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class GalleryViewModel : ViewModel() {
+class InventoryViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is Inventory Fragment"

@@ -1,13 +1,13 @@
-package com.stocked.ui.home
+package com.stocked.ui.status
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class HomeViewModel : ViewModel() {
+class StatusViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is Scanner Fragment"
+        value = "This is Status Fragment"
     }
     val text: LiveData<String> = _text
 }

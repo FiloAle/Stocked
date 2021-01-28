@@ -1,4 +1,4 @@
-package com.stocked.ui.home
+package com.stocked.ui.inventory
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.stocked.R
 
-class HomeFragment : Fragment() {
+class InventoryFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var inventoryViewModel: InventoryViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        homeViewModel =
-                ViewModelProvider(this).get(HomeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_scanner, container, false)
-        val textView: TextView = root.findViewById(R.id.text_scanner)
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
+        inventoryViewModel =
+                ViewModelProvider(this).get(InventoryViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_inv, container, false)
+        val textView: TextView = root.findViewById(R.id.text_inv)
+        inventoryViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root
