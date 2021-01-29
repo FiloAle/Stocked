@@ -16,9 +16,9 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.CaptureActivity
+import com.stocked.ui.scanner.ScannerFragment
 import org.json.JSONException
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
@@ -48,8 +48,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
                 R.id.nav_scanner, R.id.nav_inventory, R.id.nav_status), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-        //cameraTask()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -64,6 +62,13 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
         if(id == R.id.action_settings) {
             Toast.makeText(this, getString(R.string.action_settings), Toast.LENGTH_SHORT).show()
             return true
+        }else{
+            if(id == R.id.nav_scanner){
+                val fragmentManager = supportFragmentManager
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                fragmentTransaction.replace(R.id.frameLayout, ScannerFragment()).commit()
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -77,14 +82,14 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
         return EasyPermissions.hasPermissions(this, android.Manifest.permission.CAMERA)
     }
 
-    private fun cameraTask(){
+    public fun cameraTask(){
 
         if(hasCameraAccess()){
 
             var qrScanner = IntentIntegrator(this)
             qrScanner.setPrompt("Scan a QR Code")
             qrScanner.setCameraId(0)
-            qrScanner.setOrientationLocked(true)
+            qrScanner.setOrientationLocked(false)
             qrScanner.setBeepEnabled(true)
             qrScanner.captureActivity = CaptureActivity::class.java
             qrScanner.initiateScan()
@@ -98,7 +103,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
 
         var result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if(result != null){
