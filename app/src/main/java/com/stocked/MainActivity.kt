@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
                 Toast.makeText(this, "Result Not Found", Toast.LENGTH_SHORT).show()
             }else{
                 try{
-
+                    // TODO: Search the scanned code inside the database
                 }catch (exception:JSONException){
                     Toast.makeText(this, exception.localizedMessage, Toast.LENGTH_SHORT).show()
                 }
