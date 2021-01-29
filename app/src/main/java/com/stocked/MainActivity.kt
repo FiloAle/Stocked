@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.Toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -62,13 +63,11 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
         if(id == R.id.action_settings) {
             Toast.makeText(this, getString(R.string.action_settings), Toast.LENGTH_SHORT).show()
             return true
-        }else{
-            if(id == R.id.nav_scanner){
+        }else if(id == R.id.nav_scanner){
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
                 fragmentTransaction.replace(R.id.frameLayout, ScannerFragment()).commit()
                 return true
-            }
         }
         return super.onOptionsItemSelected(item)
     }

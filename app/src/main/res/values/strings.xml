@@ -7,7 +7,7 @@
     <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_scanner">QR &amp; Barcode Manager</string>
+    <string name="menu_scanner">Scanner</string>
     <string name="menu_inv">Inventory</string>
     <string name="menu_status">Status</string>
 
@@ -17,4 +17,5 @@
     <string name="cam_perm">This app needs to access the camera to work properly</string>
     <string name="cam_perm_granted">Permission granted</string>
     <string name="canceled_scan">The scan has been canceled</string>
+
 </resources>
