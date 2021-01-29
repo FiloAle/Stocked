@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
+        // TODO: Replace toast.show with an action
         if(id == R.id.action_settings) {
             Toast.makeText(this, getString(R.string.action_settings), Toast.LENGTH_SHORT).show()
             return true
