@@ -8,4 +8,7 @@
     <string name="menu_scanner">QR e Barcode Manager</string>
     <string name="fab_tooltip">Modifica l\'inventario</string>
     <string name="qr_msg">Scansiona un QR Code o un Barcode</string>
+    <string name="cam_perm">Quest\'app necessita di accesso alla fotocamera per funzionare correttamente</string>
+    <string name="canceled_scan">Lo scan è stato annullato</string>
+    <string name="cam_perm_granted">Permesso consentito</string>
 </resources>

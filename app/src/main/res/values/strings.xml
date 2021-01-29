@@ -14,4 +14,7 @@
     <string name="fab_tooltip">Edit your inventory</string>
 
     <string name="qr_msg">Scan a QR Code or a Barcode</string>
+    <string name="cam_perm">This app needs to access the camera to work properly</string>
+    <string name="cam_perm_granted">Permission granted</string>
+    <string name="canceled_scan">The scan has been canceled</string>
 </resources>

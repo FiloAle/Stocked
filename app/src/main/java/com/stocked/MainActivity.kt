@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
         if(hasCameraAccess()){
 
             var qrScanner = IntentIntegrator(this)
-            qrScanner.setPrompt("Scan a QR Code")
+            qrScanner.setPrompt(getString(R.string.qr_msg))
             qrScanner.setCameraId(0)
             qrScanner.setOrientationLocked(false)
             qrScanner.setBeepEnabled(true)
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
         }else{
            EasyPermissions.requestPermissions(
                    this,
-                   "This app requires Camera permission to work correctly.",
+                   getString(R.string.cam_perm),
                    123,
                    android.Manifest.permission.CAMERA)
         }
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
         var result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if(result != null){
             if(result.contents == null){
-                Toast.makeText(this, "Result Not Found", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.canceled_scan), Toast.LENGTH_SHORT).show()
             }else{
                 try{
                     // TODO: Search the scanned code inside the database
@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
         }
 
         if(requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE){
-            Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.cam_perm_granted), Toast.LENGTH_SHORT).show()
         }
     }
 
