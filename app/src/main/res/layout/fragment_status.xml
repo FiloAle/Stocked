@@ -19,7 +19,8 @@
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" >
+            app:layout_constraintTop_toTopOf="parent"
+            app:cardBackgroundColor="#999999">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -27,6 +28,36 @@
                 android:layout_margin="10dp"
 
                 android:text="@string/server_ip"></TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginTop="45dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+
+                android:text="@string/server_port"></TextView>
+
+            <EditText
+                android:id="@+id/editTextServerIP"
+                android:layout_width="150dp"
+                android:layout_height="25dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Server IP"
+                android:layout_marginLeft="120dp"
+                android:layout_marginTop="10dp"
+                />
+
+            <EditText
+                android:id="@+id/edittextServerPort"
+                android:layout_width="150dp"
+                android:layout_height="25dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Server IP"
+                android:layout_marginLeft="120dp"
+                android:layout_marginTop="10dp"
+                />
 
         </androidx.cardview.widget.CardView>
 
