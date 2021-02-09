@@ -12,7 +12,7 @@ import com.stocked.R
 
 class InventoryFragment : Fragment() {
 
-    private lateinit var inventoryViewModel: AddViewModel
+    private lateinit var inventoryViewModel: InventoryViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -20,7 +20,7 @@ class InventoryFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         inventoryViewModel =
-                ViewModelProvider(this).get(AddViewModel::class.java)
+                ViewModelProvider(this).get(InventoryViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_inv, container, false)
         val textView: TextView = root.findViewById(R.id.text_inv)
         inventoryViewModel.text.observe(viewLifecycleOwner, Observer {
