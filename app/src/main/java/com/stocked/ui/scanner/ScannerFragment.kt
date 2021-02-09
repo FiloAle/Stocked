@@ -52,13 +52,13 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
-        var result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if(result != null){
             if(result.contents == null){
                 Toast.makeText(activity, getString(R.string.canceled_scan), Toast.LENGTH_SHORT).show()
             }else{
                 try{
-                    // TODO: Search the scanned code inside the database
+                    Toast.makeText(activity, "ciao", Toast.LENGTH_LONG).show()
                 }catch (exception: JSONException){
                     Toast.makeText(activity, exception.localizedMessage, Toast.LENGTH_SHORT).show()
                 }
