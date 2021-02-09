@@ -19,7 +19,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.CaptureActivity
+import com.stocked.ui.inventory.InventoryFragment
 import com.stocked.ui.scanner.ScannerFragment
+import com.stocked.ui.status.StatusFragment
 import org.json.JSONException
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
@@ -60,16 +62,31 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         // TODO: Replace toast.show with an action
-        if(id == R.id.action_settings) {
-            Toast.makeText(this, getString(R.string.action_settings), Toast.LENGTH_SHORT).show()
-            return true
-        }else if(id == R.id.nav_scanner){
+        when (id) {
+            R.id.action_settings -> {
+                Toast.makeText(this, getString(R.string.action_settings), Toast.LENGTH_SHORT).show()
+                return true
+            }
+            R.id.nav_scanner -> {
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
                 fragmentTransaction.replace(R.id.frameLayout, ScannerFragment()).commit()
                 return true
+            }
+            R.id.nav_status -> {
+                val fragmentManager = supportFragmentManager
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                fragmentTransaction.replace(R.id.frameLayout, StatusFragment()).commit()
+                return true
+            }
+            R.id.nav_inventory -> {
+                val fragmentManager = supportFragmentManager
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                fragmentTransaction.replace(R.id.frameLayout, InventoryFragment()).commit()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {
