@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
 import android.widget.Toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -19,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.CaptureActivity
-import com.stocked.ui.inventory.InventoryFragment
+import com.stocked.ui.add.AddFragment
 import com.stocked.ui.scanner.ScannerFragment
 import com.stocked.ui.status.StatusFragment
 import org.json.JSONException
@@ -84,7 +83,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
             R.id.nav_inventory -> {
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
-                fragmentTransaction.replace(R.id.frameLayout, InventoryFragment()).commit()
+                fragmentTransaction.replace(R.id.frameLayout, AddFragment()).commit()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)

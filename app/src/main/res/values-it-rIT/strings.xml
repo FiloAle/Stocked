@@ -13,4 +13,5 @@
     <string name="cam_perm_granted">Permesso consentito</string>
     <string name="server_ip">Server IP</string>
     <string name="server_port">Porta server</string>
+    <string name="menu_add">Aggiungi prodotto</string>
 </resources>

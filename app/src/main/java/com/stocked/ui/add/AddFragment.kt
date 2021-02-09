@@ -1,4 +1,4 @@
-package com.stocked.ui.inventory
+package com.stocked.ui.add
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.stocked.R
 
-class InventoryFragment : Fragment() {
+class AddFragment : Fragment() {
 
     private lateinit var inventoryViewModel: AddViewModel
 
