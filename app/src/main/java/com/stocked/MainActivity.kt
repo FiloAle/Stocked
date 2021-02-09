@@ -26,7 +26,7 @@ import org.json.JSONException
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 
-class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, EasyPermissions.RationaleCallbacks {
+class MainActivity : AppCompatActivity(){
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -94,69 +94,4 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private fun hasCameraAccess() : Boolean{
-        return EasyPermissions.hasPermissions(this, android.Manifest.permission.CAMERA)
-    }
-
-    public fun cameraTask(){
-
-        if(hasCameraAccess()){
-
-            var qrScanner = IntentIntegrator(this)
-            qrScanner.setPrompt(getString(R.string.qr_msg))
-            qrScanner.setCameraId(0)
-            qrScanner.setOrientationLocked(false)
-            qrScanner.setBeepEnabled(true)
-            qrScanner.captureActivity = CaptureActivity::class.java
-            qrScanner.initiateScan()
-        }else{
-           EasyPermissions.requestPermissions(
-                   this,
-                   getString(R.string.cam_perm),
-                   123,
-                   android.Manifest.permission.CAMERA)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
-        var result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if(result != null){
-            if(result.contents == null){
-                Toast.makeText(this, getString(R.string.canceled_scan), Toast.LENGTH_SHORT).show()
-            }else{
-                try{
-                    // TODO: Search the scanned code inside the database
-                }catch (exception:JSONException){
-                    Toast.makeText(this, exception.localizedMessage, Toast.LENGTH_SHORT).show()
-                }
-            }
-        }else{
-            super.onActivityResult(requestCode, resultCode, data)
-        }
-
-        if(requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE){
-            Toast.makeText(this, getString(R.string.cam_perm_granted), Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
-    }
-
-    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-    }
-
-    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-        if(EasyPermissions.somePermissionPermanentlyDenied(this, perms)){
-            AppSettingsDialog.Builder(this).build().show()
-        }
-    }
-
-    override fun onRationaleAccepted(requestCode: Int) {
-    }
-
-    override fun onRationaleDenied(requestCode: Int) {
-    }
 }
