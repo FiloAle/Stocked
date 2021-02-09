@@ -11,4 +11,5 @@
     <string name="cam_perm">Quest\'app necessita di accesso alla fotocamera per funzionare correttamente</string>
     <string name="canceled_scan">Lo scan è stato annullato</string>
     <string name="cam_perm_granted">Permesso consentito</string>
+    <string name="server_ip">Server IP</string>
 </resources>

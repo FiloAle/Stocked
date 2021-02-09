@@ -25,17 +25,19 @@ import com.stocked.ui.status.StatusFragment
 import org.json.JSONException
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import java.net.Socket
 
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, EasyPermissions.RationaleCallbacks {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
+        val socket:Socket
         val fab: FloatingActionButton = findViewById(R.id.fab)
         // TODO: Replace snackbar.show with an action
         fab.setOnClickListener { view ->
@@ -117,6 +119,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
                    android.Manifest.permission.CAMERA)
         }
     }
+
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 

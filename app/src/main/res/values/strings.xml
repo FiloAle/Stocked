@@ -18,4 +18,5 @@
     <string name="cam_perm_granted">Permission granted</string>
     <string name="canceled_scan">The scan has been canceled</string>
 
+    <string name="server_ip">Server IP</string>
 </resources>
