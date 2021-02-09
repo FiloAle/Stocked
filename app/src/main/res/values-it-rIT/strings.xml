@@ -12,4 +12,5 @@
     <string name="canceled_scan">Lo scan è stato annullato</string>
     <string name="cam_perm_granted">Permesso consentito</string>
     <string name="server_ip">Server IP</string>
+    <string name="server_port">Porta server</string>
 </resources>

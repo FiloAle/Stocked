@@ -19,4 +19,6 @@
     <string name="canceled_scan">The scan has been canceled</string>
 
     <string name="server_ip">Server IP</string>
+    <string name="server_port">Server port</string>
+
 </resources>
