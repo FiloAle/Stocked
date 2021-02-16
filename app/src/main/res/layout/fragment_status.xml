@@ -11,16 +11,17 @@
         android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
 
+            android:layout_marginEnd="10dp"
+            app:cardBackgroundColor="#999999"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:cardBackgroundColor="#999999">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -28,11 +29,12 @@
                 android:layout_margin="10dp"
 
                 android:text="@string/server_ip"></TextView>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
-                android:layout_marginTop="45dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="45dp"
                 android:layout_marginBottom="10dp"
 
                 android:text="@string/server_port"></TextView>
@@ -41,25 +43,33 @@
                 android:id="@+id/editTextServerIP"
                 android:layout_width="150dp"
                 android:layout_height="25dp"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Server IP"
                 android:layout_marginLeft="120dp"
                 android:layout_marginTop="10dp"
-                />
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Server IP" />
 
             <EditText
                 android:id="@+id/edittextServerPort"
                 android:layout_width="150dp"
                 android:layout_height="25dp"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Server IP"
                 android:layout_marginLeft="120dp"
                 android:layout_marginTop="10dp"
-                />
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Server IP" />
 
         </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/btnButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

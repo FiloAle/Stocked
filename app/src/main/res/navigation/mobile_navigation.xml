@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_inventory"
-        android:name="com.stocked.ui.inventory.AddFragment"
+        android:name="com.stocked.ui.inventory.InventoryFragment"
         android:label="@string/menu_inv"
         tools:layout="@layout/fragment_inv" />
 
@@ -16,6 +16,12 @@
         android:name="com.stocked.ui.scanner.ScannerFragment"
         android:label="@string/menu_scanner"
         tools:layout="@layout/fragment_scanner" />
+
+    <fragment
+        android:id="@+id/nav_add"
+        android:name="com.stocked.ui.add.AddFragment"
+        android:label="@string/menu_add"
+        tools:layout="@layout/fragment_add" />
 
 
     <fragment

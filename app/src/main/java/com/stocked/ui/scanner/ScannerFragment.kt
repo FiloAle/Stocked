@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.CaptureActivity
-import com.stocked.MainActivity
 import com.stocked.R
 import org.json.JSONException
 import pub.devrel.easypermissions.AppSettingsDialog
@@ -26,7 +25,7 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         return view
     }
 
-    public fun cameraTask(){
+    fun cameraTask(){
 
         if(hasCameraAccess()){
 

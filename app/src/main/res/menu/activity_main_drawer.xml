@@ -13,7 +13,7 @@
             android:icon="@drawable/ic_round_qr_code_scanner_24"
             android:title="@string/menu_scanner" />
         <item
-            android:id="@+id/navigation_add"
+            android:id="@+id/nav_add"
             android:icon="@drawable/ic_round_add_circle_outline_24"
             android:title="@string/menu_add" />
         <item
