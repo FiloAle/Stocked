@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.Toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -18,25 +19,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.CaptureActivity
-import com.stocked.ui.add.AddFragment
+import com.stocked.ui.inventory.InventoryFragment
 import com.stocked.ui.scanner.ScannerFragment
 import com.stocked.ui.status.StatusFragment
 import org.json.JSONException
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
-import java.net.Socket
 
-class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, EasyPermissions.RationaleCallbacks {
+class MainActivity : AppCompatActivity(){
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        val socket:Socket
+
         val fab: FloatingActionButton = findViewById(R.id.fab)
         // TODO: Replace snackbar.show with an action
         fab.setOnClickListener { view ->
@@ -83,7 +82,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
             R.id.nav_inventory -> {
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
-                fragmentTransaction.replace(R.id.frameLayout, AddFragment()).commit()
+                fragmentTransaction.replace(R.id.frameLayout, InventoryFragment()).commit()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -95,71 +94,4 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private fun hasCameraAccess() : Boolean{
-        return EasyPermissions.hasPermissions(this, android.Manifest.permission.CAMERA)
-    }
-
-    public fun cameraTask(){
-
-        if(hasCameraAccess()){
-
-            var qrScanner = IntentIntegrator(this)
-            qrScanner.setPrompt(getString(R.string.qr_msg))
-            qrScanner.setCameraId(0)
-            qrScanner.setOrientationLocked(false)
-            qrScanner.setBeepEnabled(true)
-            qrScanner.captureActivity = CaptureActivity::class.java
-            qrScanner.initiateScan()
-        }else{
-           EasyPermissions.requestPermissions(
-                   this,
-                   getString(R.string.cam_perm),
-                   123,
-                   android.Manifest.permission.CAMERA)
-        }
-    }
-
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
-        var result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if(result != null){
-            if(result.contents == null){
-                Toast.makeText(this, getString(R.string.canceled_scan), Toast.LENGTH_SHORT).show()
-            }else{
-                try{
-                    // TODO: Search the scanned code inside the database
-                }catch (exception:JSONException){
-                    Toast.makeText(this, exception.localizedMessage, Toast.LENGTH_SHORT).show()
-                }
-            }
-        }else{
-            super.onActivityResult(requestCode, resultCode, data)
-        }
-
-        if(requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE){
-            Toast.makeText(this, getString(R.string.cam_perm_granted), Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
-    }
-
-    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-    }
-
-    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-        if(EasyPermissions.somePermissionPermanentlyDenied(this, perms)){
-            AppSettingsDialog.Builder(this).build().show()
-        }
-    }
-
-    override fun onRationaleAccepted(requestCode: Int) {
-    }
-
-    override fun onRationaleDenied(requestCode: Int) {
-    }
 }
