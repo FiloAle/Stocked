@@ -12,18 +12,18 @@ import com.stocked.R
 
 class AddFragment : Fragment() {
 
-    private lateinit var inventoryViewModel: AddViewModel
+    private lateinit var addViewModel: AddViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        inventoryViewModel =
+        addViewModel =
                 ViewModelProvider(this).get(AddViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_inv, container, false)
         val textView: TextView = root.findViewById(R.id.text_inv)
-        inventoryViewModel.text.observe(viewLifecycleOwner, Observer {
+        addViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root
