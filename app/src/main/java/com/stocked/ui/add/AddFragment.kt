@@ -21,8 +21,8 @@ class AddFragment : Fragment() {
     ): View? {
         addViewModel =
                 ViewModelProvider(this).get(AddViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_inv, container, false)
-        val textView: TextView = root.findViewById(R.id.text_inv)
+        val root = inflater.inflate(R.layout.fragment_add, container, false)
+        val textView: TextView = root.findViewById(R.id.text_add)
         addViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
