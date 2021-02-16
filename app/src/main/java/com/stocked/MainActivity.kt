@@ -15,6 +15,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import com.stocked.ui.add.AddFragment
 import com.stocked.ui.inventory.InventoryFragment
 import com.stocked.ui.scanner.ScannerFragment
 import com.stocked.ui.status.StatusFragment
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity(){
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.nav_scanner, R.id.nav_inventory, R.id.nav_status), drawerLayout)
+                R.id.nav_scanner, R.id.nav_inventory, R.id.nav_add, R.id.nav_status), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
@@ -53,9 +54,8 @@ class MainActivity : AppCompatActivity(){
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
         // TODO: Replace toast.show with an action
-        when (id) {
+        when (item.itemId) {
             R.id.action_settings -> {
                 Toast.makeText(this, getString(R.string.action_settings), Toast.LENGTH_SHORT).show()
                 return true
@@ -76,6 +76,12 @@ class MainActivity : AppCompatActivity(){
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
                 fragmentTransaction.replace(R.id.frameLayout, InventoryFragment()).commit()
+                return true
+            }
+            R.id.nav_add -> {
+                val fragmentManager = supportFragmentManager
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                fragmentTransaction.replace(R.id.frameLayout, AddFragment()).commit()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
