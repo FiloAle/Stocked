@@ -50,42 +50,28 @@
                 android:text="Server IP" />
 
             <EditText
-                android:id="@+id/edittextServerPort"
+                android:id="@+id/editTextServerPort"
                 android:layout_width="150dp"
                 android:layout_height="25dp"
                 android:layout_marginLeft="120dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="45dp"
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:text="Server IP" />
 
-        </androidx.cardview.widget.CardView>
+            <Button
+                android:id="@+id/buttonConnect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="70dp"
+                android:layout_marginBottom="10dp"
+                android:text="Connect" />
 
-        <Button
-            android:id="@+id/btnButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/text_status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 
 </FrameLayout>

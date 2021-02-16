@@ -19,10 +19,12 @@ import com.stocked.ui.add.AddFragment
 import com.stocked.ui.inventory.InventoryFragment
 import com.stocked.ui.scanner.ScannerFragment
 import com.stocked.ui.status.StatusFragment
+import java.net.Socket
 
 class MainActivity : AppCompatActivity(){
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    lateinit var socket : Socket
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

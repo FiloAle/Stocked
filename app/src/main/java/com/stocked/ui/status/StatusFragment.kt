@@ -19,7 +19,7 @@ class StatusFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_status, container, false)
-        button = root.findViewById(R.id.btnButton)
+        button = root.findViewById(R.id.buttonConnect)
         button.setOnClickListener(View.OnClickListener {
             Toast.makeText(activity, "maledizione", Toast.LENGTH_SHORT).show()
         })
