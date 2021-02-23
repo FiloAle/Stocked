@@ -24,7 +24,10 @@ import java.net.Socket
 class MainActivity : AppCompatActivity(){
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    lateinit var socket : Socket
+
+    companion object {
+        lateinit var socket: Socket
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
