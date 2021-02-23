@@ -49,8 +49,8 @@
                 android:layout_marginTop="10dp"
 
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Server IP" />
+                android:hint="Server IP"
+                android:inputType="textPersonName" />
 
             <EditText
                 android:id="@+id/editTextServerPort"
@@ -59,8 +59,8 @@
                 android:layout_marginLeft="120dp"
                 android:layout_marginTop="60dp"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Server IP" />
+                android:hint="Server Port"
+                android:inputType="textPersonName" />
 
             <Button
                 android:id="@+id/buttonConnect"
