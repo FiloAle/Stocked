@@ -6,20 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.textfield.TextInputEditText
 import com.stocked.MainActivity
 import com.stocked.R
+import java.lang.Exception
 import java.net.Socket
 import java.util.function.ToIntFunction
+import kotlin.concurrent.thread
 import kotlin.properties.Delegates
+import kotlinx.coroutines.*
+import java.net.SocketAddress
 
 class StatusFragment : Fragment() {
 
     private lateinit var connectButton: Button
-    private lateinit var txtIP  : TextInputEditText
-    private lateinit var txtPort : TextInputEditText
+    private lateinit var txtIP  : EditText
+    private lateinit var txtPort : EditText
     private lateinit var ip : String
     private var port by Delegates.notNull<Int>()
 
@@ -34,14 +39,40 @@ class StatusFragment : Fragment() {
             txtIP= root.findViewById(R.id.editTextServerIP)
             txtPort = root.findViewById(R.id.editTextServerPort)
             ip = txtIP.text.toString()
-            port =  txtPort.text.toString().toInt()
-            MainActivity.socket = Socket(ip, port)
+            port = 0
+            try {
 
-            if(MainActivity.socket.isConnected)
-            {
-                connectButton.setBackgroundColor(Color.GREEN)
-                connectButton.text="Connected"
+                port =  txtPort.text.toString().toInt()
+            }catch(e:Exception) {
+                port = 0
             }
+
+
+            GlobalScope.launch(Dispatchers.Main) {
+                try {
+                    if(ip != "" && port != 0)
+                    {
+
+                        MainActivity.socket.soTimeout = 1000
+                        MainActivity.socket = Socket(ip, port)
+
+
+                        if(MainActivity.socket.isConnected)
+                        {
+
+                            connectButton.setBackgroundColor(Color.GREEN)
+                            connectButton.text="Connected"
+                        }
+                    }
+                }catch (e:Exception){
+                    connectButton.setBackgroundColor(Color.RED)
+                    connectButton.text="Not Connected"
+
+                }
+
+            }
+
+
 
         })
 

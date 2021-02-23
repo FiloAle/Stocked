@@ -60,7 +60,7 @@
                 android:layout_marginTop="60dp"
                 android:ems="10"
                 android:hint="Server Port"
-                android:inputType="textPersonName" />
+                android:inputType="number" />
 
             <Button
                 android:id="@+id/buttonConnect"
