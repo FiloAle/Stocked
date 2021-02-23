@@ -27,15 +27,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:text="@string/server_ip"></TextView>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="80dp"
                 android:layout_marginBottom="10dp"
+
 
 
                 android:text="@string/server_port"></TextView>
@@ -46,6 +47,7 @@
                 android:layout_height="50dp"
                 android:layout_marginLeft="120dp"
                 android:layout_marginTop="10dp"
+
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:text="Server IP" />
