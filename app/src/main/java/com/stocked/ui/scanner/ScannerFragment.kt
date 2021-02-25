@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.zxing.integration.android.IntentIntegrator
@@ -15,14 +16,17 @@ import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 
 class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPermissions.RationaleCallbacks {
+
+    lateinit var scannerView : View
+
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-        val view: View = inflater.inflate(R.layout.fragment_scanner, container, false)
+        scannerView = inflater.inflate(R.layout.fragment_scanner, container, false)
         cameraTask()
-        return view
+        return scannerView
     }
 
     fun cameraTask(){
@@ -32,18 +36,20 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
             var qrScanner = IntentIntegrator(activity)
             qrScanner.setPrompt(getString(R.string.qr_msg))
             qrScanner.setCameraId(0)
-            qrScanner.setOrientationLocked(false)
-            qrScanner.setBeepEnabled(true)
+            qrScanner.setOrientationLocked(true)
+            qrScanner.setBeepEnabled(false)
             qrScanner.captureActivity = CaptureActivity::class.java
-            qrScanner.initiateScan()
+            IntentIntegrator.forSupportFragment(this).initiateScan();
         }else{
             EasyPermissions.requestPermissions(
                 this,
                 getString(R.string.cam_perm),
                 123,
-                android.Manifest.permission.CAMERA)
+                android.Manifest.permission.CAMERA
+            )
         }
     }
+
 
     private fun hasCameraAccess() : Boolean{
         return EasyPermissions.hasPermissions(requireActivity(), android.Manifest.permission.CAMERA)
@@ -54,10 +60,13 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if(result != null){
             if(result.contents == null){
+
                 Toast.makeText(activity, getString(R.string.canceled_scan), Toast.LENGTH_SHORT).show()
+
             }else{
                 try{
-                    Toast.makeText(activity, "ciao", Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, "Successful", Toast.LENGTH_SHORT).show()
+                    scannerView.findViewById<TextView>(R.id.txtCode).text = result.contents
                 }catch (exception: JSONException){
                     Toast.makeText(activity, exception.localizedMessage, Toast.LENGTH_SHORT).show()
                 }
@@ -69,14 +78,26 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         if(requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE){
             Toast.makeText(activity, getString(R.string.cam_perm_granted), Toast.LENGTH_SHORT).show()
         }
+
+
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onPause() {
+        super.onPause()
+        Thread.sleep(100)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+        cameraTask()
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
@@ -90,4 +111,6 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
 
     override fun onRationaleDenied(requestCode: Int) {
     }
+
+
 }

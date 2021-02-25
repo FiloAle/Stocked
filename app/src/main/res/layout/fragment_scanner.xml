@@ -8,8 +8,24 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/txtCode"
+            android:layout_width="239dp"
+            android:layout_height="38dp"
+            android:fontFamily="monospace"
+            android:maxLines="1"
+            android:text="Code"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.785"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.154" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </FrameLayout>
