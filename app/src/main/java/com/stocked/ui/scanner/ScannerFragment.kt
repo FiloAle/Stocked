@@ -23,17 +23,15 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         scannerView = inflater.inflate(R.layout.fragment_scanner, container, false)
         cameraTask()
         return scannerView
     }
 
-    fun cameraTask(){
-
+    private fun cameraTask(){
         if(hasCameraAccess()){
-
-            var qrScanner = IntentIntegrator(activity)
+            val qrScanner = IntentIntegrator(activity)
             qrScanner.setPrompt(getString(R.string.qr_msg))
             qrScanner.setCameraId(0)
             qrScanner.setOrientationLocked(true)
@@ -50,19 +48,15 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         }
     }
 
-
     private fun hasCameraAccess() : Boolean{
         return EasyPermissions.hasPermissions(requireActivity(), android.Manifest.permission.CAMERA)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if(result != null){
             if(result.contents == null){
-
                 Toast.makeText(activity, getString(R.string.canceled_scan), Toast.LENGTH_SHORT).show()
-
             }else{
                 try{
                     Toast.makeText(activity, "Successful", Toast.LENGTH_SHORT).show()
@@ -78,8 +72,6 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         if(requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE){
             Toast.makeText(activity, getString(R.string.cam_perm_granted), Toast.LENGTH_SHORT).show()
         }
-
-
     }
 
     override fun onPause() {
@@ -111,6 +103,4 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
 
     override fun onRationaleDenied(requestCode: Int) {
     }
-
-
 }
