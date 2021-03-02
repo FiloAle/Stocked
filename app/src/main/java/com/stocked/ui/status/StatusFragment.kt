@@ -18,6 +18,7 @@ import java.util.function.ToIntFunction
 import kotlin.concurrent.thread
 import kotlin.properties.Delegates
 import kotlinx.coroutines.*
+import java.net.InetAddress
 import java.net.SocketAddress
 
 class StatusFragment : Fragment() {
@@ -27,6 +28,7 @@ class StatusFragment : Fragment() {
     private lateinit var txtPort : EditText
     private lateinit var ip : String
     private var port by Delegates.notNull<Int>()
+
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -48,26 +50,38 @@ class StatusFragment : Fragment() {
             }
 
 
-            GlobalScope.launch(Dispatchers.Main) {
+            GlobalScope.launch(Dispatchers.Default) {
                 try {
                     if(ip != "" && port != 0)
                     {
 
-                        MainActivity.socket.soTimeout = 1000
-                        MainActivity.socket = Socket(ip, port)
+                        var ipaddr = InetAddress.getByName(ip)
+                        MainActivity.socket = Socket(ipaddr, port)
+
 
 
                         if(MainActivity.socket.isConnected)
                         {
+                            GlobalScope.launch(Dispatchers.Main){
+                                connectButton.setBackgroundColor(Color.GREEN)
+                                connectButton.text="Connected"
+                            }
 
-                            connectButton.setBackgroundColor(Color.GREEN)
-                            connectButton.text="Connected"
+                        }
+                        else
+                        {
+                            GlobalScope.launch(Dispatchers.Main){
+                                connectButton.setBackgroundColor(Color.RED)
+                                connectButton.text="Not Connected"
+                            }
                         }
                     }
                 }catch (e:Exception){
-                    connectButton.setBackgroundColor(Color.RED)
-                    connectButton.text="Not Connected"
 
+                    GlobalScope.launch(Dispatchers.Main){
+                        connectButton.setBackgroundColor(Color.RED)
+                        connectButton.text="Not Connected"
+                    }
                 }
 
             }
