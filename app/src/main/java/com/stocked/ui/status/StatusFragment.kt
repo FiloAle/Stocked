@@ -1,10 +1,9 @@
 package com.stocked.ui.status
 
+import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -28,6 +27,12 @@ class StatusFragment : Fragment() {
     private lateinit var txtPort : EditText
     private lateinit var ip : String
     private var port by Delegates.notNull<Int>()
+    private lateinit var myMenu: Menu
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.activity_main_drawer, menu)
+        myMenu = menu
+    }
 
 
     override fun onCreateView(
@@ -36,6 +41,7 @@ class StatusFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_status, container, false)
+
         connectButton = root.findViewById(R.id.buttonConnect)
         connectButton.setOnClickListener(View.OnClickListener {
             txtIP= root.findViewById(R.id.editTextServerIP)
@@ -65,6 +71,8 @@ class StatusFragment : Fragment() {
                             GlobalScope.launch(Dispatchers.Main){
                                 connectButton.setBackgroundColor(Color.GREEN)
                                 connectButton.text="Connected"
+                                var inv : MenuItem = myMenu.getItem(0)
+                                //inv.isEnabled = true
                             }
 
                         }
