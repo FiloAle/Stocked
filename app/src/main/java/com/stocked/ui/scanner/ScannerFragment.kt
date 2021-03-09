@@ -5,19 +5,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.google.zxing.integration.android.IntentIntegrator
-import com.journeyapps.barcodescanner.CaptureActivity
 import com.stocked.R
 import org.json.JSONException
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 
+const val AC_REMOVE = "remove"
+const val AC_ADD = "add"
+const val AC_CHECK = "check"
+
 class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPermissions.RationaleCallbacks {
 
     lateinit var scannerView : View
+    val prodotti : Array<Prodotto> = arrayOf(Prodotto("Arnica", "8032632600824", 10))
+    var selectedProduct : Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,17 +30,43 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
     ): View {
         scannerView = inflater.inflate(R.layout.fragment_scanner, container, false)
         cameraTask()
+        scannerView.findViewById<Button>(R.id.btnSend).setOnClickListener { view ->
+            checkAndSend()
+        }
         return scannerView
+    }
+
+
+    private fun checkAndSend(){
+        lateinit var rdbChecked : RadioButton
+        var actionCode : String? = null
+        var amount : Int? = 0
+        if(scannerView.findViewById<RadioButton>(R.id.rdbRemove).isChecked)
+            actionCode = AC_REMOVE
+        else
+            actionCode = AC_ADD
+
+        amount = scannerView.findViewById<EditText>(R.id.dttAmount).text.toString().toIntOrNull()
+        if(amount == null || amount <= 0 || amount > prodotti[selectedProduct].quantità){
+            Toast.makeText(requireContext(), "Invio annullato: inserire una quantità valida.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Da Fare: invio info username|password|actioncode|codiceprodotto|quantità
+
+        Toast.makeText(requireContext(), actionCode + " quantità " + amount, Toast.LENGTH_SHORT).show()
+
     }
 
     private fun cameraTask(){
         if(hasCameraAccess()){
+            /*
             val qrScanner = IntentIntegrator(activity)
             qrScanner.setPrompt(getString(R.string.qr_msg))
             qrScanner.setCameraId(0)
             qrScanner.setOrientationLocked(true)
             qrScanner.setBeepEnabled(false)
-            qrScanner.captureActivity = CaptureActivity::class.java
+            qrScanner.captureActivity = CaptureActivity::class.java*/
             IntentIntegrator.forSupportFragment(this).initiateScan();
         }else{
             EasyPermissions.requestPermissions(
@@ -60,7 +90,21 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
             }else{
                 try{
                     Toast.makeText(activity, "Successful", Toast.LENGTH_SHORT).show()
+
+                    // Da fare: check della presenza del codice nel db, se non esiste annullo operazione
+
                     scannerView.findViewById<TextView>(R.id.txtCode).text = result.contents
+                    scannerView.findViewById<RadioButton>(R.id.rdbAdd).isChecked = true
+
+                    for (i in 0..prodotti.size){
+                        if(prodotti[i].codice == result.contents){
+                            scannerView.findViewById<TextView>(R.id.txtProductName).text = prodotti[i].nomeProdotto
+                            scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = prodotti[i].quantità.toString()
+                            selectedProduct = i
+                            break
+                        }
+                    }
+
                 }catch (exception: JSONException){
                     Toast.makeText(activity, exception.localizedMessage, Toast.LENGTH_SHORT).show()
                 }
@@ -103,4 +147,31 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
 
     override fun onRationaleDenied(requestCode: Int) {
     }
+}
+
+public class Prodotto(nomeProdotto: String, codice: String, quantità: Int){
+    private var _nomeProdotto = nomeProdotto
+    private var _codice = codice
+    private var _quantità = quantità
+
+    var codice : String
+        get() = _codice
+        set(value) {
+            _codice = value
+        }
+
+    var nomeProdotto : String
+        get() = _nomeProdotto
+        set(value) {
+            _nomeProdotto = value
+        }
+
+    var quantità : Int
+        get() = _quantità
+        set(value) {
+            if(value >= 0)
+                _quantità = value
+            else
+                throw Exception("Quantità negativa")
+        }
 }
