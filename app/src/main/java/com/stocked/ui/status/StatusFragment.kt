@@ -49,11 +49,13 @@ class StatusFragment : Fragment() {
                 try {
                     if (ip != "" && port != 0) {
                         val serverIP = InetAddress.getByName(ip)
-                        MainActivity.socket.soTimeout = 100
+
+
                         MainActivity.socket = Socket(serverIP, port)
+                        MainActivity.socket.soTimeout = 500
 
-                        delay(100L)
 
+                        delay(500L)
                         if (MainActivity.socket.isConnected) {
                             GlobalScope.launch(Dispatchers.Main) {
                                 connectButton.setBackgroundColor(Color.GREEN)
