@@ -13,6 +13,9 @@ import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.io.PrintWriter
 import java.lang.Exception
 import java.net.InetAddress
 import java.net.Socket
@@ -52,10 +55,24 @@ class LoginActivity : AppCompatActivity() {
                             MainActivity.socket = Socket(serverIP, port)
 
                             if (MainActivity.socket.isConnected) {
-                                GlobalScope.launch(Dispatchers.Main){
-                                    //dio è bello
-                                    startMainActivity(view = View(this@LoginActivity))
+
+                                PrintWriter(MainActivity.socket.outputStream, true).write(user+"|"+psswd+"|check")
+
+                                var reply = BufferedReader(InputStreamReader(MainActivity.socket.getInputStream())).readLine()
+
+                                if(reply == "004" ){
+                                    GlobalScope.launch(Dispatchers.Main){
+                                        //dio è bello
+                                        startMainActivity(view = View(this@LoginActivity))
+                                    }
                                 }
+                                else if(reply == "003"){
+                                    GlobalScope.launch(Dispatchers.Main){
+
+                                        Toast.makeText( this@LoginActivity, "Credenziali errate", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+
                             } else {
                                 GlobalScope.launch(Dispatchers.Main){
 
