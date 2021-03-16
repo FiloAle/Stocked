@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.google.zxing.integration.android.IntentIntegrator
 import com.stocked.R
 import org.json.JSONException
@@ -41,16 +43,22 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         lateinit var rdbChecked : RadioButton
         var actionCode : String? = null
         var amount : Int? = 0
-        if(scannerView.findViewById<RadioButton>(R.id.rdbRemove).isChecked)
-            actionCode = AC_REMOVE
-        else
-            actionCode = AC_ADD
-
         amount = scannerView.findViewById<EditText>(R.id.dttAmount).text.toString().toIntOrNull()
-        if(amount == null || amount <= 0 || amount > prodotti[selectedProduct].quantità){
+        if(amount == null || amount <= 0){
             Toast.makeText(requireContext(), "Invio annullato: inserire una quantità valida.", Toast.LENGTH_SHORT).show()
             return
         }
+        if(scannerView.findViewById<RadioButton>(R.id.rdbRemove).isChecked){
+            actionCode = AC_REMOVE
+            if(amount > prodotti[selectedProduct].quantità){
+                Toast.makeText(requireContext(), "Invio annullato: inserire una quantità valida.", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+        }else
+            actionCode = AC_ADD
+
+
 
         // Da Fare: invio info username|password|actioncode|codiceprodotto|quantità
 
@@ -60,13 +68,6 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
 
     private fun cameraTask(){
         if(hasCameraAccess()){
-            /*
-            val qrScanner = IntentIntegrator(activity)
-            qrScanner.setPrompt(getString(R.string.qr_msg))
-            qrScanner.setCameraId(0)
-            qrScanner.setOrientationLocked(true)
-            qrScanner.setBeepEnabled(false)
-            qrScanner.captureActivity = CaptureActivity::class.java*/
             IntentIntegrator.forSupportFragment(this).initiateScan();
         }else{
             EasyPermissions.requestPermissions(
@@ -96,7 +97,7 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
                     scannerView.findViewById<TextView>(R.id.txtCode).text = result.contents
                     scannerView.findViewById<RadioButton>(R.id.rdbAdd).isChecked = true
 
-                    for (i in 0..prodotti.size){
+                    for (i in 0..prodotti.size-1){
                         if(prodotti[i].codice == result.contents){
                             scannerView.findViewById<TextView>(R.id.txtProductName).text = prodotti[i].nomeProdotto
                             scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = prodotti[i].quantità.toString()

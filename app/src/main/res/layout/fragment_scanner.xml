@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".ui.scanner.ScannerFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,7 +29,7 @@
             android:id="@+id/txtProductName"
             android:layout_width="350dp"
             android:layout_height="30dp"
-            android:layout_marginStart="31dp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="30dp"
             android:layout_marginBottom="562dp"
@@ -41,38 +41,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtCode" />
 
-        <RadioButton
-            android:id="@+id/rdbAdd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Aggiungi"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.102"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtAvailableProducts" />
-
-        <RadioButton
-            android:id="@+id/rdbRemove"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Rimuovi"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.253"
-            app:layout_constraintStart_toEndOf="@+id/rdbAdd"
-            app:layout_constraintTop_toBottomOf="@+id/txtAvailableProducts" />
-
         <TextView
             android:id="@+id/txtAvailableProducts"
             android:layout_width="150dp"
             android:layout_height="30dp"
-            android:layout_marginStart="31dp"
-            android:layout_marginTop="23dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="230dp"
             android:text="TextView"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtProductName" />
 
@@ -80,26 +59,47 @@
             android:id="@+id/dttAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="31dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="170dp"
             android:ems="10"
             android:inputType="number"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.154"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rdbAdd" />
+            app:layout_constraintTop_toBottomOf="@+id/rdgRadioButton" />
 
         <Button
             android:id="@+id/btnSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="160dp"
+            android:layout_marginTop="36dp"
             android:text="Invia"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.103"
+            app:layout_constraintHorizontal_bias="0.095"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dttAmount" />
+
+        <RadioGroup
+            android:id="@+id/rdgRadioButton"
+            android:layout_width="182dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.135"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtAvailableProducts">
+
+            <RadioButton
+                android:id="@+id/rdbAdd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Aggiungi" />
+
+            <RadioButton
+                android:id="@+id/rdbRemove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rimuovi" />
+        </RadioGroup>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
