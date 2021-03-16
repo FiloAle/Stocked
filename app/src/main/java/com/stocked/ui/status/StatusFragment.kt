@@ -1,39 +1,33 @@
 package com.stocked.ui.status
 
-import android.app.Activity
-import android.graphics.Color
+import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.google.android.material.textfield.TextInputEditText
+import com.stocked.LoginActivity
 import com.stocked.MainActivity
 import com.stocked.R
-import java.lang.Exception
-import java.net.Socket
-import java.util.function.ToIntFunction
-import kotlin.concurrent.thread
-import kotlin.properties.Delegates
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.net.InetAddress
-import java.net.SocketAddress
+import java.net.InetSocketAddress
+import java.net.Socket
+import kotlin.properties.Delegates
+
 
 class StatusFragment : Fragment() {
 
-    private lateinit var connectButton: Button
+    private lateinit var btnCheck: Button
     private lateinit var txtIP  : EditText
     private lateinit var txtPort : EditText
     private lateinit var ip : String
     private var port by Delegates.notNull<Int>()
-    private lateinit var myMenu: Menu
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.activity_main_drawer, menu)
-        myMenu = menu
-    }
-
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -42,62 +36,59 @@ class StatusFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_status, container, false)
 
-        connectButton = root.findViewById(R.id.buttonConnect)
-        connectButton.setOnClickListener(View.OnClickListener {
-            txtIP= root.findViewById(R.id.editTextServerIP)
-            txtPort = root.findViewById(R.id.editTextServerPort)
-            ip = txtIP.text.toString()
-            port = 0
-            try {
-
-                port =  txtPort.text.toString().toInt()
-            }catch(e:Exception) {
-                port = 0
-            }
-
-
-            GlobalScope.launch(Dispatchers.Default) {
+        btnCheck = root.findViewById(R.id.btnCheck)
+        btnCheck.setOnClickListener(View.OnClickListener {
+            GlobalScope.launch(Dispatchers.Default)
+            {
                 try {
-                    if(ip != "" && port != 0)
-                    {
-
-                        var ipaddr = InetAddress.getByName(ip)
-                        MainActivity.socket = Socket(ipaddr, port)
-
-
-
-                        if(MainActivity.socket.isConnected)
+                    if (MainActivity.socket.getInputStream().read() != -1) {
+                        GlobalScope.launch(Dispatchers.Main)
                         {
-                            GlobalScope.launch(Dispatchers.Main){
-                                connectButton.setBackgroundColor(Color.GREEN)
-                                connectButton.text="Connected"
-                                var inv : MenuItem = myMenu.getItem(0)
-                                //inv.isEnabled = true
-                            }
-
-                        }
-                        else
-                        {
-                            GlobalScope.launch(Dispatchers.Main){
-                                connectButton.setBackgroundColor(Color.RED)
-                                connectButton.text="Not Connected"
-                            }
+                            Toast.makeText(activity, "Connected", Toast.LENGTH_SHORT).show()
                         }
                     }
-                }catch (e:Exception){
+                } catch (ex: Exception) {
+                    GlobalScope.launch(Dispatchers.Main)
+                    {
+                        Toast.makeText(activity, "Not connected, reconnecting...", Toast.LENGTH_SHORT).show()
+                    }
+                    try {
+                        //val txtuser: EditText = root.findViewById(R.id.txtUser)
+                        //val txtpsswd: EditText = root.findViewById(R.id.txtPassword)
+                        //var user: String = txtuser.text.toString()
+                        //var psswd: String = txtpsswd.text.toString()
+                        ip = LoginActivity.ip
+                        port = LoginActivity.port
 
-                    GlobalScope.launch(Dispatchers.Main){
-                        connectButton.setBackgroundColor(Color.RED)
-                        connectButton.text="Not Connected"
+                        try {
+                            if (ip != "" && port != 0) {
+                                val serverIP = InetAddress.getByName(ip)
+                                MainActivity.socket = Socket()
+                                MainActivity.socket.connect(InetSocketAddress(serverIP, port), 1000)
+
+                                if (MainActivity.socket.isConnected) {
+                                    GlobalScope.launch(Dispatchers.Main)
+                                    {
+                                        Toast.makeText(activity, "Connected", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            }
+                        } catch (ex: Exception) {
+                            port = 0
+                            GlobalScope.launch(Dispatchers.Main)
+                            {
+                                Toast.makeText(activity, "Destination unreachable", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    } catch (ex: Exception) {
+                        GlobalScope.launch(Dispatchers.Main)
+                        {
+                            Toast.makeText(activity, "Destination unreachable", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
-
             }
-
-
-
         })
-
         return root
     }
 }

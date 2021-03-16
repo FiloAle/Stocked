@@ -1,50 +1,52 @@
 package com.stocked
 
-import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.Settings
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import java.net.InetAddress
 import java.net.Socket
 
 class LoginActivity : AppCompatActivity() {
 
-    fun startMainActivity(view: View){
-        var intent = Intent(this, MainActivity::class.java)
+    private fun startMainActivity(view: View){
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+    }
+
+    companion object {
+        var ip = ""
+        var port = 0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        var connectButton : Button = findViewById(R.id.btnLogin)
-        var txtuser : EditText = findViewById(R.id.txtUser)
-        var txtpsswd : EditText = findViewById(R.id.txtPassword)
-        var txtip : EditText = findViewById(R.id.txtServerIP)
-        var txtport : EditText = findViewById(R.id.txtServerPort)
+        val connectButton : Button = findViewById(R.id.btnLogin)
+        val txtip: EditText = findViewById(R.id.txtServerIP)
+        val txtport: EditText = findViewById(R.id.txtServerPort)
+        val txtuser : EditText = findViewById(R.id.txtUser)
+        val txtpsswd : EditText = findViewById(R.id.txtPassword)
 
         connectButton.setOnClickListener{
             try {
                 var user:String = txtuser.text.toString()
-                var psswd:String=txtpsswd.text.toString()
-                var ip:String = txtip.text.toString()
-                var port:Int=0
+                var psswd:String = txtpsswd.text.toString()
+                ip = txtip.text.toString()
+                port = 0
 
                 try {
                     port = txtport.text.toString().toInt()
                 } catch (e: Exception) {
                     port = 0
                 }
+
                 GlobalScope.launch(Dispatchers.Default){
                     try {
                         if (ip != "" && port != 0) {
@@ -53,7 +55,6 @@ class LoginActivity : AppCompatActivity() {
 
                             if (MainActivity.socket.isConnected) {
                                 GlobalScope.launch(Dispatchers.Main){
-                                    //dio è bello
                                     startMainActivity(view = View(this@LoginActivity))
                                 }
                             } else {
@@ -64,26 +65,16 @@ class LoginActivity : AppCompatActivity() {
                             }
                         }
                     }catch (ex:Exception){
-
                         GlobalScope.launch(Dispatchers.Main){
 
                             Toast.makeText(this@LoginActivity, ex.toString(), Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
-
-
-
             }
             catch (ex :Exception){
                 Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT).show()
             }
-
         }
-
-
     }
-
-
-
 }
