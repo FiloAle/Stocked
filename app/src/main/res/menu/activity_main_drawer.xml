@@ -6,16 +6,17 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_inventory"
-            android:enabled="true"
+            android:enabled="false"
             android:icon="@drawable/ic_round_folder_open_24"
             android:title="@string/menu_inv" />
         <item
             android:id="@+id/nav_scanner"
-            android:enabled="true"
+            android:enabled="false"
             android:icon="@drawable/ic_round_qr_code_scanner_24"
             android:title="@string/menu_scanner" />
         <item
             android:id="@+id/nav_add"
+            android:enabled="false"
             android:icon="@drawable/ic_round_add_circle_outline_24"
             android:title="@string/menu_add" />
         <item

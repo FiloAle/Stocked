@@ -9,7 +9,9 @@
         android:id="@+id/nav_inventory"
         android:name="com.stocked.ui.inventory.InventoryFragment"
         android:label="@string/menu_inv"
-        tools:layout="@layout/fragment_inv" />
+        tools:layout="@layout/fragment_inv"
+
+        />
 
     <fragment
         android:id="@+id/nav_scanner"
