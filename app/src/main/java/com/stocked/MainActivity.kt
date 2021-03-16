@@ -1,5 +1,6 @@
 package com.stocked
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity(){
         setSupportActionBar(toolbar)
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
-        // TODO: Replace snackbar.show with an action
+        // Replace snackbar.show with an action
         fab.setOnClickListener { view ->
             Snackbar.make(view, getString(R.string.fab_tooltip), Snackbar.LENGTH_LONG).setAction("Action", null).show()
         }
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity(){
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // TODO: Replace toast.show with an action
+        // Replace toast.show with an action
         when (item.itemId) {
             R.id.action_settings -> {
                 Toast.makeText(this, getString(R.string.action_settings), Toast.LENGTH_SHORT).show()

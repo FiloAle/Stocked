@@ -2,7 +2,6 @@ package com.stocked
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -15,7 +14,7 @@ import java.net.Socket
 
 class LoginActivity : AppCompatActivity() {
 
-    private fun startMainActivity(view: View){
+    private fun startMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
@@ -55,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
 
                             if (MainActivity.socket.isConnected) {
                                 GlobalScope.launch(Dispatchers.Main){
-                                    startMainActivity(view = View(this@LoginActivity))
+                                    startMainActivity()
                                 }
                             } else {
                                 GlobalScope.launch(Dispatchers.Main){

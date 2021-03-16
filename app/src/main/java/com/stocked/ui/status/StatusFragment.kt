@@ -2,6 +2,7 @@ package com.stocked.ui.status
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,13 @@ class StatusFragment : Fragment() {
     private lateinit var ip : String
     private var port by Delegates.notNull<Int>()
 
+//    private fun restartLogin()
+//    {
+//        //activity?.finish()
+//        val intent = Intent(activity, LoginActivity::class.java)
+//        startActivity(intent)
+//    }
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -41,7 +49,9 @@ class StatusFragment : Fragment() {
             GlobalScope.launch(Dispatchers.Default)
             {
                 try {
-                    if (MainActivity.socket.getInputStream().read() != -1) {
+                    MainActivity.socket = Socket()
+                    MainActivity.socket.connect(InetSocketAddress(LoginActivity.ip, LoginActivity.port), 1000)
+                    if (MainActivity.socket.isConnected) {
                         GlobalScope.launch(Dispatchers.Main)
                         {
                             Toast.makeText(activity, "Connected", Toast.LENGTH_SHORT).show()
@@ -84,6 +94,7 @@ class StatusFragment : Fragment() {
                         GlobalScope.launch(Dispatchers.Main)
                         {
                             Toast.makeText(activity, "Destination unreachable", Toast.LENGTH_SHORT).show()
+                            //restartLogin()
                         }
                     }
                 }
