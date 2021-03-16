@@ -53,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
 
                             if (MainActivity.socket.isConnected) {
                                 GlobalScope.launch(Dispatchers.Main){
-
+                                    //dio è bello
                                     startMainActivity(view = View(this@LoginActivity))
                                 }
                             } else {
