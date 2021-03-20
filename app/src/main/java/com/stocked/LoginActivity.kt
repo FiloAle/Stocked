@@ -2,6 +2,7 @@ package com.stocked
 
 import android.content.Intent
 import android.os.Bundle
+import android.system.Os.socket
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -9,8 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.DataOutputStream
 import java.net.InetAddress
 import java.net.Socket
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -53,17 +56,23 @@ class LoginActivity : AppCompatActivity() {
                             MainActivity.socket = Socket(serverIP, port)
 
                             if (MainActivity.socket.isConnected) {
+                                val dOut = DataOutputStream(MainActivity.socket.getOutputStream())
+                                dOut.writeByte(1)
+                                dOut.writeUTF("Messaggio di check credenziali") // *** DA FARE ***
+                                dOut.flush()
+                                // *** POI RICEZIONE RISPOSTA SERVER ***
+
                                 GlobalScope.launch(Dispatchers.Main){
                                     startMainActivity()
                                 }
                             } else {
                                 GlobalScope.launch(Dispatchers.Main){
 
-                                    Toast.makeText( this@LoginActivity, "Impossibile connettersi al server", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this@LoginActivity, "Impossibile connettersi al server", Toast.LENGTH_SHORT).show()
                                 }
                             }
                         }
-                    }catch (ex:Exception){
+                    }catch (ex: Exception){
                         GlobalScope.launch(Dispatchers.Main){
 
                             Toast.makeText(this@LoginActivity, ex.toString(), Toast.LENGTH_SHORT).show()
@@ -71,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             }
-            catch (ex :Exception){
+            catch (ex: Exception){
                 Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT).show()
             }
         }
