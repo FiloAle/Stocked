@@ -1,18 +1,16 @@
 package com.stocked.ui.status
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.stocked.LoginActivity
 import com.stocked.MainActivity
 import com.stocked.R
+import com.stocked.ui.LoadingDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -25,8 +23,7 @@ import kotlin.properties.Delegates
 class StatusFragment : Fragment() {
 
     private lateinit var btnCheck: Button
-    private lateinit var txtIP  : EditText
-    private lateinit var txtPort : EditText
+    private lateinit var loadingDialog: LoadingDialog
     private lateinit var ip : String
     private var port by Delegates.notNull<Int>()
 
@@ -44,17 +41,23 @@ class StatusFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_status, container, false)
 
+        loadingDialog = activity?.let { LoadingDialog(it) }!!
         btnCheck = root.findViewById(R.id.btnCheck)
         btnCheck.setOnClickListener(View.OnClickListener {
             GlobalScope.launch(Dispatchers.Default)
             {
                 try {
                     MainActivity.socket = Socket()
+                    GlobalScope.launch(Dispatchers.Main) {
+                        loadingDialog.startLoadingDialog()
+                    }
                     MainActivity.socket.connect(InetSocketAddress(LoginActivity.ip, LoginActivity.port), 1000)
+
                     if (MainActivity.socket.isConnected) {
                         GlobalScope.launch(Dispatchers.Main)
                         {
                             Toast.makeText(activity, "Connected", Toast.LENGTH_SHORT).show()
+                            loadingDialog.dismissDialog()
                         }
                     }
                 } catch (ex: Exception) {
@@ -88,13 +91,14 @@ class StatusFragment : Fragment() {
                             GlobalScope.launch(Dispatchers.Main)
                             {
                                 Toast.makeText(activity, "Destination unreachable", Toast.LENGTH_SHORT).show()
+                                //ritornare a login activity *** DA FARE ***
                             }
                         }
                     } catch (ex: Exception) {
                         GlobalScope.launch(Dispatchers.Main)
                         {
                             Toast.makeText(activity, "Destination unreachable", Toast.LENGTH_SHORT).show()
-                            //restartLogin()
+                            //ritornare a login activity *** DA FARE ***
                         }
                     }
                 }

@@ -21,5 +21,6 @@
 
     <string name="server_ip">Server IP</string>
     <string name="server_port">Server port</string>
+    <string name="loading_msg">Loading...</string>
 
 </resources>
