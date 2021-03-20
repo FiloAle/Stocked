@@ -13,6 +13,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:text="Aggiungi un prodotto"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,54 +21,54 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.011" />
+        app:layout_constraintVertical_bias="0.084" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="148dp"
-        android:text="Button"
+        android:text="Aggiungi"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/dttCode"
         android:layout_width="380dp"
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="44dp"
         android:layout_marginEnd="15dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text="Codice"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_add" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/dttProductName"
         android:layout_width="380dp"
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text="Nome prodotto"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/dttCode" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName3"
+        android:id="@+id/dttProductQuantity"
         android:layout_width="380dp"
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text="Quantità"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+        app:layout_constraintTop_toBottomOf="@+id/dttProductName" />
 </androidx.constraintlayout.widget.ConstraintLayout>

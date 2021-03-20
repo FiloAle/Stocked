@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.google.zxing.integration.android.IntentIntegrator
+import com.stocked.MainActivity
 import com.stocked.R
 import org.json.JSONException
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import java.io.DataOutputStream
 
 const val AC_REMOVE = "remove"
 const val AC_ADD = "add"
@@ -20,7 +22,6 @@ const val AC_CHECK = "check"
 class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPermissions.RationaleCallbacks {
 
     lateinit var scannerView : View
-    val prodotti : Array<Prodotto> = arrayOf(Prodotto("Arnica", "8032632600824", 10))
     var selectedProduct : Int = 0
 
     override fun onCreateView(
@@ -48,19 +49,15 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         }
         if(scannerView.findViewById<RadioButton>(R.id.rdbRemove).isChecked){
             actionCode = AC_REMOVE
-            if(amount > prodotti[selectedProduct].quantità){
-                Toast.makeText(requireContext(), "Invio annullato: inserire una quantità valida.", Toast.LENGTH_SHORT).show()
-                return
-            }
 
         }else
             actionCode = AC_ADD
 
-
-
-        // Da Fare: invio info username|password|actioncode|codiceprodotto|quantità
+        // **DA FARE** Invio dati con modifica, numero indica in più/in meno
+        // "*varuser|*varpass|" + actionCode + "|*varcode|*varnumber"
 
         Toast.makeText(requireContext(), actionCode + " quantità " + amount, Toast.LENGTH_SHORT).show()
+        // **DA FARE** attendere risposta del server
 
     }
 
@@ -81,6 +78,18 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         return EasyPermissions.hasPermissions(requireActivity(), android.Manifest.permission.CAMERA)
     }
 
+    private fun verifyCode(varCode : String){
+        // **DA FARE** Invio del codice da verificare
+        /*val dOut = DataOutputStream(MainActivity.socket.getOutputStream())
+        dOut.writeByte(1)
+        dOut.writeUTF("*varuser|*varpass|select|" + varCode)
+        dOut.flush()*/
+
+        // **DA FARE** Ricezione codici risposta
+        // 005 prodotto non presente nel database
+        // 002 comunica codice, nome e quantità
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if(result != null){
@@ -91,18 +100,10 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
                     Toast.makeText(activity, "Successful", Toast.LENGTH_SHORT).show()
 
                     // Da fare: check della presenza del codice nel db, se non esiste annullo operazione
+                    verifyCode(result.contents)
 
                     scannerView.findViewById<TextView>(R.id.txtCode).text = result.contents
                     scannerView.findViewById<RadioButton>(R.id.rdbAdd).isChecked = true
-
-                    for (i in 0..prodotti.size-1){
-                        if(prodotti[i].codice == result.contents){
-                            scannerView.findViewById<TextView>(R.id.txtProductName).text = prodotti[i].nomeProdotto
-                            scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = prodotti[i].quantità.toString()
-                            selectedProduct = i
-                            break
-                        }
-                    }
 
                 }catch (exception: JSONException){
                     Toast.makeText(activity, exception.localizedMessage, Toast.LENGTH_SHORT).show()
@@ -146,31 +147,4 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
 
     override fun onRationaleDenied(requestCode: Int) {
     }
-}
-
-public class Prodotto(nomeProdotto: String, codice: String, quantità: Int){
-    private var _nomeProdotto = nomeProdotto
-    private var _codice = codice
-    private var _quantità = quantità
-
-    var codice : String
-        get() = _codice
-        set(value) {
-            _codice = value
-        }
-
-    var nomeProdotto : String
-        get() = _nomeProdotto
-        set(value) {
-            _nomeProdotto = value
-        }
-
-    var quantità : Int
-        get() = _quantità
-        set(value) {
-            if(value >= 0)
-                _quantità = value
-            else
-                throw Exception("Quantità negativa")
-        }
 }
