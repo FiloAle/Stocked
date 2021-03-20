@@ -1,6 +1,5 @@
 package com.stocked
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -17,7 +16,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.stocked.ui.add.AddFragment
-import com.stocked.ui.inventory.InventoryFragment
 import com.stocked.ui.scanner.ScannerFragment
 import com.stocked.ui.status.StatusFragment
 import java.net.Socket
@@ -77,12 +75,6 @@ class MainActivity : AppCompatActivity(){
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
                 fragmentTransaction.replace(R.id.frameLayout, StatusFragment()).commit()
-                return true
-            }
-            R.id.nav_inventory -> {
-                val fragmentManager = supportFragmentManager
-                val fragmentTransaction = fragmentManager.beginTransaction()
-                fragmentTransaction.replace(R.id.frameLayout, InventoryFragment()).commit()
                 return true
             }
             R.id.nav_add -> {
