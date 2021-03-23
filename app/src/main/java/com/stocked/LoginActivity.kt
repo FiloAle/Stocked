@@ -59,6 +59,7 @@ class LoginActivity : AppCompatActivity() {
                 GlobalScope.launch(Dispatchers.Default){
                     try {
                         if (ip != "") {
+                            MainActivity.socket = Socket(ip, port)
                             var srvReply = "-1" // -1 = not connected
                             PrintWriter(MainActivity.socket.outputStream, true).write("check")
                             val d = async {
