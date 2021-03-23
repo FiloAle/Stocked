@@ -11,7 +11,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.stocked.LoginActivity
+import com.stocked.MainActivity
 import com.stocked.R
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.io.PrintWriter
 
 class AddFragment : Fragment() {
 
@@ -84,6 +89,26 @@ class AddFragment : Fragment() {
             // Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             // **DA FARE** Ricezione codice risposta e handling codice
             // guardare codici
+            PrintWriter(MainActivity.socket.outputStream, true).write(LoginActivity.user+"|"+LoginActivity.pwdHash+"|new|"+productCode+"|"+productAmount+"|"+productName)
+
+            var reply = BufferedReader(InputStreamReader(MainActivity.socket.getInputStream())).readLine()
+
+            if(reply == "002"){
+                message = "Dati corretti"
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            }
+            else if(reply == "006"){
+                Toast.makeText(requireContext(), "Nome prodotto già presente", Toast.LENGTH_SHORT).show()
+
+            }
+            else if(reply == "007"){
+
+                Toast.makeText(requireContext(), "Codice prodotto già presente", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                Toast.makeText(requireContext(), "Operzaione Rifiutata", Toast.LENGTH_SHORT).show()
+            }
+
         }
         else {
             message = message.dropLast(1)
