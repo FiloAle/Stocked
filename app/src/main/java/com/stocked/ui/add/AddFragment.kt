@@ -37,7 +37,6 @@ class AddFragment : Fragment() {
     }
 
     private fun btnSendAction(){
-        // 5 8 13 cifre accettate barcode
         var productCode : String? = addView.findViewById<EditText>(R.id.dttCode).text.toString()
         var productName : String? = addView.findViewById<EditText>(R.id.dttProductName).text.toString()
         var productAmount : String? = addView.findViewById<EditText>(R.id.dttProductQuantity).text.toString()

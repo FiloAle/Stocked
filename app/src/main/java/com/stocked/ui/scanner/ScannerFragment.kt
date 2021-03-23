@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.google.zxing.integration.android.IntentIntegrator
 import com.stocked.MainActivity
 import com.stocked.R
+import com.stocked.ui.add.AddFragment
 import org.json.JSONException
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
@@ -59,6 +60,23 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         Toast.makeText(requireContext(), actionCode + " quantità " + amount, Toast.LENGTH_SHORT).show()
         // **DA FARE** attendere risposta del server
 
+        var message : String = "" // Conversione a stringa del messaggio ricevuto
+        var messageFields = message.split("|")
+        var response : String = messageFields[0] // Codice intero ricevuto
+
+        when (response){
+            "002" ->{
+                Toast.makeText(requireContext(), "Operazione eseguita", Toast.LENGTH_SHORT).show()
+                cameraTask()
+            }
+
+            else ->{
+                Toast.makeText(requireContext(), "Errore sconosciuto: operazione annullata", Toast.LENGTH_SHORT).show()
+                cameraTask()
+            }
+        }
+
+
     }
 
     private fun cameraTask(){
@@ -85,9 +103,26 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         dOut.writeUTF("*varuser|*varpass|select|" + varCode)
         dOut.flush()*/
 
-        // **DA FARE** Ricezione codici risposta
-        // 005 prodotto non presente nel database
-        // 002 comunica codice, nome e quantità
+        var message : String = "002|8004150100629|Acetone|20" // Messaggio ricevuto
+        var messageFields = message.split("|")
+        var response : String = messageFields[0] // Codice intero ricevuto
+
+        when (response){
+            "002" -> {
+                // Split del messaggio
+                // Valorizzazione dei textview
+
+                scannerView.findViewById<TextView>(R.id.txtCode).text = messageFields[1]
+                scannerView.findViewById<TextView>(R.id.txtProductName).text = messageFields[2]
+                scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = messageFields[3]
+            }
+
+            "005" -> {
+                // Prodotto non presente
+                // Transizione all'add fragment ????????
+            }
+        }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
