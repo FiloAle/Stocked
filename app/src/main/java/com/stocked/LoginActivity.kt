@@ -7,12 +7,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import java.io.BufferedReader
 import java.io.DataOutputStream
+import java.io.InputStreamReader
+import java.io.PrintWriter
 import java.net.InetAddress
 import java.net.Socket
+import java.security.MessageDigest
 
 
 class LoginActivity : AppCompatActivity() {
@@ -25,6 +27,17 @@ class LoginActivity : AppCompatActivity() {
     companion object {
         var ip = ""
         var port = 0
+        lateinit var user : String
+        lateinit var pwdHash : String
+    }
+
+    private fun ByteArray.toHex(): String {
+        return joinToString("") { "%02x".format(it) }
+    }
+
+    private fun String.toMD5(): String {
+        val bytes = MessageDigest.getInstance("MD5").digest(this.toByteArray())
+        return bytes.toHex()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,43 +51,46 @@ class LoginActivity : AppCompatActivity() {
 
         connectButton.setOnClickListener{
             try {
-                var user:String = txtuser.text.toString()
-                var psswd:String = txtpsswd.text.toString()
+                user = txtuser.text.toString()
+                pwdHash = txtpsswd.text.toString().toMD5()
                 ip = txtip.text.toString()
-                port = 0
-
-                try {
-                    port = txtport.text.toString().toInt()
-                } catch (e: Exception) {
-                    port = 0
-                }
+                port = txtport.text.toString().toInt()
 
                 GlobalScope.launch(Dispatchers.Default){
                     try {
-                        if (ip != "" && port != 0) {
-                            val serverIP = InetAddress.getByName(ip)
-                            MainActivity.socket = Socket(serverIP, port)
+                        if (ip != "") {
+                            var srvReply = "-1" // -1 = not connected
+                            PrintWriter(MainActivity.socket.outputStream, true).write("check")
+                            val d = async {
+                                srvReply = BufferedReader(InputStreamReader(MainActivity.socket.inputStream)).readLine()
+                            }
+                            withTimeout(1000) { d.await() }
 
-                            if (MainActivity.socket.isConnected) {
-                                val dOut = DataOutputStream(MainActivity.socket.getOutputStream())
-                                dOut.writeByte(1)
-                                dOut.writeUTF("Messaggio di check credenziali") // *** DA FARE ***
-                                dOut.flush()
-                                // *** POI RICEZIONE RISPOSTA SERVER ***
+                            if (srvReply != "-1") {
+                                PrintWriter(MainActivity.socket.outputStream, true).write("$user|$pwdHash|check")
+                                withTimeout(1000) { d.await() }
 
-                                GlobalScope.launch(Dispatchers.Main){
-                                    startMainActivity()
+                                if(srvReply == "004") {
+                                    GlobalScope.launch(Dispatchers.Main) {
+                                        startMainActivity()
+                                    }
+                                }
+                                else if(srvReply == "003")
+                                {
+                                    Toast.makeText(this@LoginActivity, "User e/o password errati", Toast.LENGTH_SHORT).show()
                                 }
                             } else {
                                 GlobalScope.launch(Dispatchers.Main){
-
                                     Toast.makeText(this@LoginActivity, "Impossibile connettersi al server", Toast.LENGTH_SHORT).show()
                                 }
                             }
                         }
+                        else
+                        {
+                            // l'utente non ha inserito l'ip
+                        }
                     }catch (ex: Exception){
                         GlobalScope.launch(Dispatchers.Main){
-
                             Toast.makeText(this@LoginActivity, ex.toString(), Toast.LENGTH_SHORT).show()
                         }
                     }
