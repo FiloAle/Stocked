@@ -19,9 +19,6 @@ import java.security.MessageDigest
 
 class LoginActivity : AppCompatActivity() {
 
-    lateinit var user : String
-    lateinit var pwdHash : String
-
     private fun startMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
@@ -30,6 +27,8 @@ class LoginActivity : AppCompatActivity() {
     companion object {
         var ip = ""
         var port = 0
+        lateinit var user : String
+        lateinit var pwdHash : String
     }
 
     private fun ByteArray.toHex(): String {
