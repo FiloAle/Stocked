@@ -83,13 +83,12 @@ class AddFragment : Fragment() {
         }
 
         if(checkSend){
-            // **DA FARE** Inviare i parametri stringa "*varuser|*varpass|new|*varcode|*varnumber|*varname"
-            // message = "Dati corretti"
-            // Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-            // **DA FARE** Ricezione codice risposta e handling codice
-            // guardare codici
+            message = "Dati corretti"
+
+            // Invio pacchetto dati di aggiunta
             PrintWriter(MainActivity.socket.outputStream, true).write(LoginActivity.user+"|"+LoginActivity.pwdHash+"|new|"+productCode+"|"+productAmount+"|"+productName)
 
+            // Ricezione risposta dal server
             var reply = BufferedReader(InputStreamReader(MainActivity.socket.getInputStream())).readLine()
 
             if(reply == "002"){
@@ -105,7 +104,7 @@ class AddFragment : Fragment() {
                 Toast.makeText(requireContext(), "Codice prodotto già presente", Toast.LENGTH_SHORT).show()
             }
             else {
-                Toast.makeText(requireContext(), "Operzaione Rifiutata", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Operazione Rifiutata", Toast.LENGTH_SHORT).show()
             }
 
         }

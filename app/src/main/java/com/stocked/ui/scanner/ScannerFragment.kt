@@ -8,13 +8,17 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.google.zxing.integration.android.IntentIntegrator
+import com.stocked.LoginActivity
 import com.stocked.MainActivity
 import com.stocked.R
 import com.stocked.ui.add.AddFragment
 import org.json.JSONException
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import java.io.BufferedReader
 import java.io.DataOutputStream
+import java.io.InputStreamReader
+import java.io.PrintWriter
 
 const val AC_REMOVE = "remove"
 const val AC_ADD = "add"
@@ -23,7 +27,7 @@ const val AC_CHECK = "check"
 class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPermissions.RationaleCallbacks {
 
     lateinit var scannerView : View
-    var selectedProduct : Int = 0
+    var selectedProduct : String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,13 +58,12 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         }else
             actionCode = AC_ADD
 
-        // **DA FARE** Invio dati con modifica, numero indica in più/in meno
-        // "*varuser|*varpass|" + actionCode + "|*varcode|*varnumber"
+        // Invio dati con modifica, numero indica in più/in meno
+        //PrintWriter(MainActivity.socket.outputStream, true).write(LoginActivity.user+"|"+ LoginActivity.pwdHash+"|"+actionCode+"|"+selectedProduct+"|"+amount)
 
-        Toast.makeText(requireContext(), actionCode + " quantità " + amount, Toast.LENGTH_SHORT).show()
         // **DA FARE** attendere risposta del server
 
-        var message : String = "" // Conversione a stringa del messaggio ricevuto
+        var message : String = "002" // Conversione a stringa del messaggio ricevuto
         var messageFields = message.split("|")
         var response : String = messageFields[0] // Codice intero ricevuto
 
@@ -97,21 +100,19 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
     }
 
     private fun verifyCode(varCode : String){
-        // **DA FARE** Invio del codice da verificare
-        /*val dOut = DataOutputStream(MainActivity.socket.getOutputStream())
-        dOut.writeByte(1)
-        dOut.writeUTF("*varuser|*varpass|select|" + varCode)
-        dOut.flush()*/
 
-        var message : String = "002|8004150100629|Acetone|20" // Messaggio ricevuto
-        var messageFields = message.split("|")
+        // Invio pacchetto dati di aggiunta
+        PrintWriter(MainActivity.socket.outputStream, true).write(LoginActivity.user+"|"+ LoginActivity.pwdHash+"|"+ AC_CHECK+"|"+varCode)
+
+        // Ricezione risposta dal server
+        var reply = BufferedReader(InputStreamReader(MainActivity.socket.getInputStream())).readLine()
+        var messageFields = reply.split("|")
         var response : String = messageFields[0] // Codice intero ricevuto
 
         when (response){
-            "002" -> {
-                // Split del messaggio
+            "002" ->{
                 // Valorizzazione dei textview
-
+                selectedProduct = messageFields[1]
                 scannerView.findViewById<TextView>(R.id.txtCode).text = messageFields[1]
                 scannerView.findViewById<TextView>(R.id.txtProductName).text = messageFields[2]
                 scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = messageFields[3]
