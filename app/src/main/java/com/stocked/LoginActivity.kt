@@ -2,7 +2,6 @@ package com.stocked
 
 import android.content.Intent
 import android.os.Bundle
-import android.system.Os.socket
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -11,11 +10,8 @@ import kotlinx.coroutines.*
 import java.io.BufferedReader
 import java.io.DataOutputStream
 import java.io.InputStreamReader
-import java.io.PrintWriter
-import java.net.InetAddress
 import java.net.Socket
 import java.security.MessageDigest
-
 
 class LoginActivity : AppCompatActivity() {
 
@@ -61,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
                         if (ip != "") {
                             MainActivity.socket = Socket(ip, port)
                             var srvReply = "-1" // -1 = not connected
-                            var apollo = DataOutputStream(MainActivity.socket.getOutputStream())
+                            val apollo = DataOutputStream(MainActivity.socket.getOutputStream())
                             //apollo.writeUTF("check")
                             apollo.write("check".toByteArray())
                             apollo.flush()
@@ -93,7 +89,9 @@ class LoginActivity : AppCompatActivity() {
                         }
                         else
                         {
-                            // l'utente non ha inserito l'ip
+                            GlobalScope.launch(Dispatchers.Main){
+                                Toast.makeText(this@LoginActivity, "Indirizzo IP non inserito", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }catch (ex: Exception){
                         GlobalScope.launch(Dispatchers.Main){
