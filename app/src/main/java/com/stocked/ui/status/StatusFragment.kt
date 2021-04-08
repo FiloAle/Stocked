@@ -35,7 +35,7 @@ class StatusFragment : Fragment() {
 
         loadingDialog = activity?.let { LoadingDialog(it) }!!
         btnCheck = root.findViewById(R.id.btnCheck)
-        btnCheck.setOnClickListener(View.OnClickListener {
+        btnCheck.setOnClickListener {
             GlobalScope.launch(Dispatchers.Default)
             {
                 try {
@@ -43,7 +43,12 @@ class StatusFragment : Fragment() {
                     GlobalScope.launch(Dispatchers.Main) {
                         loadingDialog.startLoadingDialog()
                     }
-                    MainActivity.socket.connect(InetSocketAddress(LoginActivity.ip, LoginActivity.port), 1000)
+                    MainActivity.socket.connect(
+                        InetSocketAddress(
+                            LoginActivity.ip,
+                            LoginActivity.port
+                        ), 1000
+                    )
 
                     if (MainActivity.socket.isConnected) {
                         GlobalScope.launch(Dispatchers.Main)
@@ -55,7 +60,11 @@ class StatusFragment : Fragment() {
                 } catch (ex: Exception) {
                     GlobalScope.launch(Dispatchers.Main)
                     {
-                        Toast.makeText(activity, "Not connected, reconnecting...", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            activity,
+                            "Not connected, reconnecting...",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                     try {
                         //val txtuser: EditText = root.findViewById(R.id.txtUser)
@@ -82,7 +91,11 @@ class StatusFragment : Fragment() {
                             port = 0
                             GlobalScope.launch(Dispatchers.Main)
                             {
-                                Toast.makeText(activity, "Destination unreachable", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    activity,
+                                    "Destination unreachable",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 //ritornare a login activity *** DA FARE ***
                             }
                         }
@@ -95,7 +108,7 @@ class StatusFragment : Fragment() {
                     }
                 }
             }
-        })
+        }
         return root
     }
 }
