@@ -60,9 +60,9 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
 
         // **DA FARE** attendere risposta del server
 
-        var message : String = "002" // Conversione a stringa del messaggio ricevuto
-        var messageFields = message.split("|")
-        var response : String = messageFields[0] // Codice intero ricevuto
+        val message : String = "002" // Conversione a stringa del messaggio ricevuto
+        val messageFields = message.split("|")
+        val response : String = messageFields[0] // Codice intero ricevuto
 
         when (response){
             "002" ->{

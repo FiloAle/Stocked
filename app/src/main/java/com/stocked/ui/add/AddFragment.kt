@@ -37,9 +37,9 @@ class AddFragment : Fragment() {
     }
 
     private fun btnSendAction(){
-        var productCode : String? = addView.findViewById<EditText>(R.id.dttCode).text.toString()
-        var productName : String? = addView.findViewById<EditText>(R.id.dttProductName).text.toString()
-        var productAmount : String? = addView.findViewById<EditText>(R.id.dttProductQuantity).text.toString()
+        val productCode : String? = addView.findViewById<EditText>(R.id.dttCode).text.toString()
+        val productName : String? = addView.findViewById<EditText>(R.id.dttProductName).text.toString()
+        val productAmount : String? = addView.findViewById<EditText>(R.id.dttProductQuantity).text.toString()
         var checkSend : Boolean = true
         var message : String = ""
 
