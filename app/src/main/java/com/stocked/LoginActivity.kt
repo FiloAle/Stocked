@@ -59,15 +59,21 @@ class LoginActivity : AppCompatActivity() {
                 GlobalScope.launch(Dispatchers.Default){
                     try {
                         if (ip != "") {
+                            MainActivity.socket = Socket(ip, port)
                             var srvReply = "-1" // -1 = not connected
-                            PrintWriter(MainActivity.socket.outputStream, true).write("check")
+                            var apollo = DataOutputStream(MainActivity.socket.getOutputStream())
+                            //apollo.writeUTF("check")
+                            apollo.write("check".toByteArray())
+                            apollo.flush()
+
                             val d = async {
                                 srvReply = BufferedReader(InputStreamReader(MainActivity.socket.inputStream)).readLine()
                             }
                             withTimeout(1000) { d.await() }
 
                             if (srvReply != "-1") {
-                                PrintWriter(MainActivity.socket.outputStream, true).write("$user|$pwdHash|check")
+                                apollo.write("$user|$pwdHash|check".toByteArray())
+                                apollo.flush()
                                 withTimeout(1000) { d.await() }
 
                                 if(srvReply == "004") {
