@@ -19,20 +19,12 @@ import java.net.InetSocketAddress
 import java.net.Socket
 import kotlin.properties.Delegates
 
-
 class StatusFragment : Fragment() {
 
     private lateinit var btnCheck: Button
     private lateinit var loadingDialog: LoadingDialog
     private lateinit var ip : String
     private var port by Delegates.notNull<Int>()
-
-//    private fun restartLogin()
-//    {
-//        //activity?.finish()
-//        val intent = Intent(activity, LoginActivity::class.java)
-//        startActivity(intent)
-//    }
 
     override fun onCreateView(
             inflater: LayoutInflater,

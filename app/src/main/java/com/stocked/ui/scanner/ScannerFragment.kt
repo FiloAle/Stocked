@@ -11,12 +11,10 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.stocked.LoginActivity
 import com.stocked.MainActivity
 import com.stocked.R
-import com.stocked.ui.add.AddFragment
 import org.json.JSONException
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.BufferedReader
-import java.io.DataOutputStream
 import java.io.InputStreamReader
 import java.io.PrintWriter
 
@@ -36,12 +34,11 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
     ): View {
         scannerView = inflater.inflate(R.layout.fragment_scanner, container, false)
         cameraTask()
-        scannerView.findViewById<Button>(R.id.btnSend).setOnClickListener { view ->
+        scannerView.findViewById<Button>(R.id.btnSend).setOnClickListener {
             checkAndSend()
         }
         return scannerView
     }
-
 
     private fun checkAndSend(){
         lateinit var rdbChecked : RadioButton
@@ -78,8 +75,6 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
                 cameraTask()
             }
         }
-
-
     }
 
     private fun cameraTask(){
@@ -100,30 +95,27 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
     }
 
     private fun verifyCode(varCode : String){
-
         // Invio pacchetto dati di aggiunta
         PrintWriter(MainActivity.socket.outputStream, true).write(LoginActivity.user+"|"+ LoginActivity.pwdHash+"|"+ AC_CHECK+"|"+varCode)
 
         // Ricezione risposta dal server
-        var reply = BufferedReader(InputStreamReader(MainActivity.socket.getInputStream())).readLine()
-        var messageFields = reply.split("|")
-        var response : String = messageFields[0] // Codice intero ricevuto
+        val reply = BufferedReader(InputStreamReader(MainActivity.socket.getInputStream())).readLine()
+        val messageFields = reply.split("|")
+        val response : String = messageFields[0] // Codice intero ricevuto
 
-        when (response){
-            "002" ->{
+        when (response) {
+            "002" -> {
                 // Valorizzazione dei textview
                 selectedProduct = messageFields[1]
                 scannerView.findViewById<TextView>(R.id.txtCode).text = messageFields[1]
                 scannerView.findViewById<TextView>(R.id.txtProductName).text = messageFields[2]
                 scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = messageFields[3]
             }
-
             "005" -> {
                 // Prodotto non presente
                 // Transizione all'add fragment ????????
             }
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

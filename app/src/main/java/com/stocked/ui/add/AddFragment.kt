@@ -1,13 +1,11 @@
 package com.stocked.ui.add
 
 import android.os.Bundle
-import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -27,17 +25,14 @@ class AddFragment : Fragment() {
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
-        addViewModel =
-                ViewModelProvider(this).get(AddViewModel::class.java)
+    ): View {
+        addViewModel = ViewModelProvider(this).get(AddViewModel::class.java)
         addView = inflater.inflate(R.layout.fragment_add, container, false)
 
-        var send : Button = addView.findViewById(R.id.btnAdd)
+        val send : Button = addView.findViewById(R.id.btnAdd)
         send.setOnClickListener{
             btnSendAction()
         }
-
-
         return addView
     }
 
@@ -68,7 +63,7 @@ class AddFragment : Fragment() {
 
         // Check of quantity
         if(productAmount?.length?.compareTo(0) == 1){
-            if(productAmount?.toIntOrNull() != null && productAmount.toInt() < 0){
+            if(productAmount.toIntOrNull() != null && productAmount.toInt() < 0){
                 checkSend = false
                 message += "La quantità deve essere positiva\n"
             }
@@ -89,24 +84,23 @@ class AddFragment : Fragment() {
             PrintWriter(MainActivity.socket.outputStream, true).write(LoginActivity.user+"|"+LoginActivity.pwdHash+"|new|"+productCode+"|"+productAmount+"|"+productName)
 
             // Ricezione risposta dal server
-            var reply = BufferedReader(InputStreamReader(MainActivity.socket.getInputStream())).readLine()
+            val reply = BufferedReader(InputStreamReader(MainActivity.socket.getInputStream())).readLine()
 
-            if(reply == "002"){
-                message = "Dati corretti"
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            when (reply) {
+                "002" -> {
+                    message = "Dati corretti"
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                }
+                "006" -> {
+                    Toast.makeText(requireContext(), "Nome prodotto già presente", Toast.LENGTH_SHORT).show()
+                }
+                "007" -> {
+                    Toast.makeText(requireContext(), "Codice prodotto già presente", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    Toast.makeText(requireContext(), "Operazione Rifiutata", Toast.LENGTH_SHORT).show()
+                }
             }
-            else if(reply == "006"){
-                Toast.makeText(requireContext(), "Nome prodotto già presente", Toast.LENGTH_SHORT).show()
-
-            }
-            else if(reply == "007"){
-
-                Toast.makeText(requireContext(), "Codice prodotto già presente", Toast.LENGTH_SHORT).show()
-            }
-            else {
-                Toast.makeText(requireContext(), "Operazione Rifiutata", Toast.LENGTH_SHORT).show()
-            }
-
         }
         else {
             message = message.dropLast(1)
