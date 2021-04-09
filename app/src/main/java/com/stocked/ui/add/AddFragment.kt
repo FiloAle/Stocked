@@ -13,6 +13,7 @@ import com.stocked.LoginActivity
 import com.stocked.MainActivity
 import com.stocked.R
 import java.io.BufferedReader
+import java.io.DataOutputStream
 import java.io.InputStreamReader
 import java.io.PrintWriter
 
@@ -81,7 +82,11 @@ class AddFragment : Fragment() {
             message = "Dati corretti"
 
             // Invio pacchetto dati di aggiunta
-            PrintWriter(MainActivity.socket.outputStream, true).write(LoginActivity.user+"|"+LoginActivity.pwdHash+"|new|"+productCode+"|"+productAmount+"|"+productName)
+            var format : String = LoginActivity.user + "|" + LoginActivity.pwdHash + "|new|$productCode|$productAmount|$productName"
+
+            val apollo = DataOutputStream(MainActivity.socket.getOutputStream())
+            apollo.write(format.toByteArray())
+            apollo.flush()
 
             // Ricezione risposta dal server
             val reply = BufferedReader(InputStreamReader(MainActivity.socket.getInputStream())).readLine()

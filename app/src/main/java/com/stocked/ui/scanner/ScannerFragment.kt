@@ -15,6 +15,7 @@ import org.json.JSONException
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.BufferedReader
+import java.io.DataOutputStream
 import java.io.InputStreamReader
 import java.io.PrintWriter
 
@@ -51,17 +52,18 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         }
         if(scannerView.findViewById<RadioButton>(R.id.rdbRemove).isChecked){
             actionCode = AC_REMOVE
-
         }else
             actionCode = AC_ADD
 
         // Invio dati con modifica, numero indica in più/in meno
-        //PrintWriter(MainActivity.socket.outputStream, true).write(LoginActivity.user+"|"+ LoginActivity.pwdHash+"|"+actionCode+"|"+selectedProduct+"|"+amount)
+        var format : String = LoginActivity.user + "|" + LoginActivity.pwdHash + "|" + actionCode + "|" + selectedProduct + "|" + amount
 
-        // **DA FARE** attendere risposta del server
+        val apollo = DataOutputStream(MainActivity.socket.getOutputStream())
+        apollo.write(format.toByteArray())
+        apollo.flush()
 
-        val message : String = "002" // Conversione a stringa del messaggio ricevuto
-        val messageFields = message.split("|")
+        val reply = BufferedReader(InputStreamReader(MainActivity.socket.getInputStream())).readLine()
+        val messageFields = reply.split("|")
         val response : String = messageFields[0] // Codice intero ricevuto
 
         when (response){
@@ -95,8 +97,13 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
     }
 
     private fun verifyCode(varCode : String){
+
         // Invio pacchetto dati di aggiunta
-        PrintWriter(MainActivity.socket.outputStream, true).write(LoginActivity.user+"|"+ LoginActivity.pwdHash+"|"+ AC_CHECK+"|"+varCode)
+        var format : String = LoginActivity.user + "|" + LoginActivity.pwdHash + "|" + AC_CHECK + "|" + varCode
+
+        val apollo = DataOutputStream(MainActivity.socket.getOutputStream())
+        apollo.write(format.toByteArray())
+        apollo.flush()
 
         // Ricezione risposta dal server
         val reply = BufferedReader(InputStreamReader(MainActivity.socket.getInputStream())).readLine()
