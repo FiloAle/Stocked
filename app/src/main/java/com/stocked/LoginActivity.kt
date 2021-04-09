@@ -7,11 +7,10 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
-import java.io.BufferedReader
-import java.io.DataOutputStream
-import java.io.InputStreamReader
+import java.io.*
 import java.net.Socket
 import java.security.MessageDigest
+import java.util.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -57,13 +56,18 @@ class LoginActivity : AppCompatActivity() {
                         if (ip != "") {
                             MainActivity.socket = Socket(ip, port)
                             var srvReply = "-1" // -1 = not connected
+                            val reader = DataInputStream(MainActivity.socket.getInputStream())
                             val apollo = DataOutputStream(MainActivity.socket.getOutputStream())
-                            //apollo.writeUTF("check")
                             apollo.write("check".toByteArray())
                             apollo.flush()
 
                             val d = async {
-                                srvReply = BufferedReader(InputStreamReader(MainActivity.socket.inputStream)).readLine()
+                                var msg : ByteArray = ByteArray(1024)
+                                reader.read(msg)
+                                srvReply = msg.toString(Charsets.US_ASCII)
+                                GlobalScope.launch(Dispatchers.Main){
+                                    Toast.makeText(this@LoginActivity, srvReply, Toast.LENGTH_SHORT).show()
+                                }
                             }
                             withTimeout(1000) { d.await() }
 
