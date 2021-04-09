@@ -65,9 +65,8 @@ class LoginActivity : AppCompatActivity() {
                                 var msg : ByteArray = ByteArray(1024)
                                 reader.read(msg)
                                 srvReply = msg.toString(Charsets.US_ASCII)
-                                GlobalScope.launch(Dispatchers.Main){
-                                    Toast.makeText(this@LoginActivity, srvReply, Toast.LENGTH_SHORT).show()
-                                }
+                                val rgx = Regex("[^A-Za-z0-9 |]")
+                                srvReply = rgx.replace(srvReply, "")
                             }
                             withTimeout(1000) { d.await() }
 
@@ -78,9 +77,8 @@ class LoginActivity : AppCompatActivity() {
                                 var msg : ByteArray = ByteArray(1024)
                                 reader.read(msg)
                                 srvReply = msg.toString(Charsets.US_ASCII)
-                                GlobalScope.launch(Dispatchers.Main){
-                                    Toast.makeText(this@LoginActivity, srvReply, Toast.LENGTH_SHORT).show()
-                                }
+                                val rgx = Regex("[^A-Za-z0-9 |]")
+                                srvReply = rgx.replace(srvReply, "")
 
                                 if(srvReply == "004") {
                                     GlobalScope.launch(Dispatchers.Main) {
