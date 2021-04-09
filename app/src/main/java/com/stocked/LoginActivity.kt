@@ -74,7 +74,13 @@ class LoginActivity : AppCompatActivity() {
                             if (srvReply != "-1") {
                                 apollo.write("$user|$pwdHash|check".toByteArray())
                                 apollo.flush()
-                                withTimeout(1000) { d.await() }
+
+                                var msg : ByteArray = ByteArray(1024)
+                                reader.read(msg)
+                                srvReply = msg.toString(Charsets.US_ASCII)
+                                GlobalScope.launch(Dispatchers.Main){
+                                    Toast.makeText(this@LoginActivity, srvReply, Toast.LENGTH_SHORT).show()
+                                }
 
                                 if(srvReply == "004") {
                                     GlobalScope.launch(Dispatchers.Main) {
