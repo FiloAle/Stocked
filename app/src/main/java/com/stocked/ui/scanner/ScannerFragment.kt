@@ -63,6 +63,8 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
                 interactWithSocket(format)
             }
 
+            // Tempo di attesa in modo da permettere alle funzionalità di rete di terminare lo scambio
+            // Evita che la variabile replyCommunication risulti non inizializzata
             Thread.sleep(100)
 
             val messageFields = replyCommunication.split("|")
@@ -125,12 +127,12 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         // Invio pacchetto dati di aggiunta
         var format : String = LoginActivity.user + "|" + LoginActivity.pwdHash + "|" + AC_SELECT + "|" + varCode
 
-
+        // Utilizzo un dispatcher per utilizzare le funzionalità di rete
         GlobalScope.launch(Dispatchers.Default){
             interactWithSocket(format)
         }
 
-        Thread.sleep(100)
+        Thread.sleep(400)
 
         val messageFields = replyCommunication.split("|")
         val response : String = messageFields[0] // Codice intero ricevuto
@@ -139,15 +141,28 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         when (response) {
             "002" -> {
                 // Valorizzazione dei textview
-                selectedProduct = messageFields[1]
+                // Gli sleep sono necessari per dare il tempo al sistema di aggiornare correttamente l'interfaccia
                 scannerView.findViewById<TextView>(R.id.txtCode).text = messageFields[1]
+                Thread.sleep(100)
                 scannerView.findViewById<TextView>(R.id.txtProductName).text = messageFields[2]
+                Thread.sleep(100)
                 scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = messageFields[3]
+                Thread.sleep(100)
+                scannerView.findViewById<EditText>(R.id.dttAmount).text.clear()
+                Thread.sleep(100)
             }
             "005" -> {
                 // Prodotto non presente
                 // Transizione all'add fragment ????????
                 Toast.makeText(requireContext(), "non trovato", Toast.LENGTH_SHORT)
+                scannerView.findViewById<TextView>(R.id.txtCode).text = "Non trovato"
+                Thread.sleep(100)
+                scannerView.findViewById<TextView>(R.id.txtProductName).text = "Non trovato"
+                Thread.sleep(100)
+                scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = "Non trovato"
+                Thread.sleep(100)
+
+
             }
         }
     }
@@ -161,9 +176,9 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
                 try{
                     Toast.makeText(activity, "Successful", Toast.LENGTH_SHORT).show()
 
+                    // Verifica del codice scannerizzato e ricezione della risposta dal server
                     verifyCode(result.contents)
 
-                    scannerView.findViewById<TextView>(R.id.txtCode).text = result.contents
                     scannerView.findViewById<RadioButton>(R.id.rdbAdd).isChecked = true
 
                 }catch (exception: JSONException){

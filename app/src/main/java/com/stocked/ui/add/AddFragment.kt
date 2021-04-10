@@ -20,7 +20,7 @@ class AddFragment : Fragment() {
 
     private lateinit var addView : View
     private lateinit var addViewModel: AddViewModel
-    private lateinit var replyCommunication : String
+    private lateinit var replyCommunication : String // Variabile di passaggio dati tra thread secondario e mainthread
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -37,10 +37,12 @@ class AddFragment : Fragment() {
         return addView
     }
 
+    // Procedura di invio dati al server e ricezione del codice
+    // Viene valorizzata una global variable per passare l'informazione al metodo che dovrà utilizzarla
     private fun interactWithSocket(format : String) : Unit{
         val apollo = DataOutputStream(MainActivity.socket.getOutputStream())
         apollo.write(format.toByteArray())
-        apollo.flush()
+        apollo.flush() // Invio
 
         // Ricezione risposta dal server
         var reply : String
@@ -55,6 +57,8 @@ class AddFragment : Fragment() {
     }
 
     private fun btnSendAction(){
+
+        // Prende i dati inseriti dall'utente
         val productCode : String? = addView.findViewById<EditText>(R.id.dttCode).text.toString()
         val productName : String? = addView.findViewById<EditText>(R.id.dttProductName).text.toString()
         val productAmount : String? = addView.findViewById<EditText>(R.id.dttProductQuantity).text.toString()
@@ -103,10 +107,13 @@ class AddFragment : Fragment() {
                 var format : String = LoginActivity.user + "|" + LoginActivity.pwdHash + "|new|$productCode|$productAmount|$productName"
                 var reply : String = ""
 
+                // Utilizzo un altro thread per utilizzare le funzionalità di rete in quanto non possono essere eseguite
+                // nel main thread
                 GlobalScope.launch(Dispatchers.Default){
                     interactWithSocket(format)
                 }
 
+                // Sleep necessario per far terminare le operazioni di rete
                 Thread.sleep(100)
 
                 when (replyCommunication) {
