@@ -20,7 +20,18 @@
     <string name="canceled_scan">The scan has been canceled</string>
 
     <string name="server_ip">Server IP</string>
-    <string name="server_port">Server port</string>
-    <string name="loading_msg">Loading...</string>
+    <string name="server_port">Server Port</string>
+    <string name="loading_msg">Loading…</string>
 
+    <string name="login" translatable="false">Login</string>
+    <string name="username">Username</string>
+    <string name="psw" translatable="false">Password</string>
+    <string name="execute_login">Login with your credentials</string>
+    <string name="prd_code">Product Code</string>
+    <string name="prd_name">Product Name</string>
+    <string name="prd_quantity">Quantity</string>
+    <string name="check">Check Connection</string>
+    <string name="prd_add">Add</string>
+    <string name="prd_remove">Remove</string>
+    <string name="send">Send</string>
 </resources>

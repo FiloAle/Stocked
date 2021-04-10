@@ -11,8 +11,17 @@
     <string name="cam_perm">Quest\'app necessita di accesso alla fotocamera per funzionare correttamente</string>
     <string name="canceled_scan">Lo scan è stato annullato</string>
     <string name="cam_perm_granted">Permesso consentito</string>
-    <string name="server_ip">Server IP</string>
-    <string name="server_port">Porta server</string>
+    <string name="server_ip">IP Server</string>
+    <string name="server_port">Porta Server</string>
     <string name="menu_add">Aggiungi prodotto</string>
-    <string name="loading_msg">Caricamento...</string>
+    <string name="loading_msg">Caricamento…</string>
+    <string name="username">Username</string>
+    <string name="execute_login">Esegui l\'accesso</string>
+    <string name="prd_code">Codice Prodotto</string>
+    <string name="prd_name">Nome Prodotto</string>
+    <string name="prd_quantity">Quantità</string>
+    <string name="check">Verifica Connessione</string>
+    <string name="prd_add">Aggiungi</string>
+    <string name="prd_remove">Rimuovi</string>
+    <string name="send">Invia</string>
 </resources>

@@ -2,6 +2,7 @@ package com.stocked
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -36,6 +37,10 @@ class LoginActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        this.supportActionBar?.hide()
+        this.window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        this.window.statusBarColor = getColor(R.color.blue_400)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         val connectButton : Button = findViewById(R.id.btnLogin)
