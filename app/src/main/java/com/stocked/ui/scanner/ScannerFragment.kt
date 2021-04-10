@@ -11,22 +11,22 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.stocked.LoginActivity
 import com.stocked.MainActivity
 import com.stocked.R
+import kotlinx.coroutines.*
 import org.json.JSONException
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.BufferedReader
-import java.io.DataOutputStream
-import java.io.InputStreamReader
-import java.io.PrintWriter
+import java.io.*
 
 const val AC_REMOVE = "remove"
 const val AC_ADD = "add"
 const val AC_CHECK = "check"
+const val AC_SELECT = "select"
 
 class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPermissions.RationaleCallbacks {
 
     lateinit var scannerView : View
     var selectedProduct : String = ""
+    private lateinit var replyCommunication : String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,25 +58,31 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         // Invio dati con modifica, numero indica in più/in meno
         var format : String = LoginActivity.user + "|" + LoginActivity.pwdHash + "|" + actionCode + "|" + selectedProduct + "|" + amount
 
-        val apollo = DataOutputStream(MainActivity.socket.getOutputStream())
-        apollo.write(format.toByteArray())
-        apollo.flush()
-
-        val reply = BufferedReader(InputStreamReader(MainActivity.socket.getInputStream())).readLine()
-        val messageFields = reply.split("|")
-        val response : String = messageFields[0] // Codice intero ricevuto
-
-        when (response){
-            "002" ->{
-                Toast.makeText(requireContext(), "Operazione eseguita", Toast.LENGTH_SHORT).show()
-                cameraTask()
+        try{
+            GlobalScope.launch(Dispatchers.Default){
+                interactWithSocket(format)
             }
 
-            else ->{
-                Toast.makeText(requireContext(), "Errore sconosciuto: operazione annullata", Toast.LENGTH_SHORT).show()
-                cameraTask()
+            Thread.sleep(100)
+
+            val messageFields = replyCommunication.split("|")
+            val response : String = messageFields[0] // Codice intero ricevuto
+
+            when (response){
+                "002" ->{
+                    Toast.makeText(requireContext(), "Operazione eseguita", Toast.LENGTH_SHORT).show()
+                    cameraTask()
+                }
+
+                else ->{
+                    Toast.makeText(requireContext(), "Errore sconosciuto: operazione annullata", Toast.LENGTH_SHORT).show()
+                    cameraTask()
+                }
             }
+        }catch(ex:Exception){
+            Toast.makeText(activity, ex.localizedMessage, Toast.LENGTH_SHORT).show()
         }
+
     }
 
     private fun cameraTask(){
@@ -96,19 +102,39 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         return EasyPermissions.hasPermissions(requireActivity(), android.Manifest.permission.CAMERA)
     }
 
-    private fun verifyCode(varCode : String){
-
-        // Invio pacchetto dati di aggiunta
-        var format : String = LoginActivity.user + "|" + LoginActivity.pwdHash + "|" + AC_CHECK + "|" + varCode
-
+    private fun interactWithSocket(format : String) : Unit{
         val apollo = DataOutputStream(MainActivity.socket.getOutputStream())
         apollo.write(format.toByteArray())
         apollo.flush()
 
         // Ricezione risposta dal server
-        val reply = BufferedReader(InputStreamReader(MainActivity.socket.getInputStream())).readLine()
-        val messageFields = reply.split("|")
+        var reply : String
+        val reader = DataInputStream(MainActivity.socket.getInputStream())
+        var msg : ByteArray = ByteArray(1024)
+        reader.read(msg)
+        reply = msg.toString(Charsets.US_ASCII)
+        val rgx = Regex("[^A-Za-z0-9 |]")
+        reply = rgx.replace(reply, "")
+        replyCommunication = reply
+
+        return
+    }
+
+    private fun verifyCode(varCode : String){
+
+        // Invio pacchetto dati di aggiunta
+        var format : String = LoginActivity.user + "|" + LoginActivity.pwdHash + "|" + AC_SELECT + "|" + varCode
+
+
+        GlobalScope.launch(Dispatchers.Default){
+            interactWithSocket(format)
+        }
+
+        Thread.sleep(100)
+
+        val messageFields = replyCommunication.split("|")
         val response : String = messageFields[0] // Codice intero ricevuto
+
 
         when (response) {
             "002" -> {
@@ -121,6 +147,7 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
             "005" -> {
                 // Prodotto non presente
                 // Transizione all'add fragment ????????
+                Toast.makeText(requireContext(), "non trovato", Toast.LENGTH_SHORT)
             }
         }
     }
@@ -134,7 +161,6 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
                 try{
                     Toast.makeText(activity, "Successful", Toast.LENGTH_SHORT).show()
 
-                    // Da fare: check della presenza del codice nel db, se non esiste annullo operazione
                     verifyCode(result.contents)
 
                     scannerView.findViewById<TextView>(R.id.txtCode).text = result.contents
@@ -142,6 +168,8 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
 
                 }catch (exception: JSONException){
                     Toast.makeText(activity, exception.localizedMessage, Toast.LENGTH_SHORT).show()
+                }catch(ex: Exception){
+                    Toast.makeText(activity, ex.localizedMessage, Toast.LENGTH_SHORT).show()
                 }
             }
         }else{
