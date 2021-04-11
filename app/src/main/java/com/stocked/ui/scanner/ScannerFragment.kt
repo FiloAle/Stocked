@@ -20,14 +20,13 @@ import java.io.*
 
 const val AC_REMOVE = "remove"
 const val AC_ADD = "add"
-const val AC_CHECK = "check"
 const val AC_SELECT = "select"
 
 class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPermissions.RationaleCallbacks {
 
     lateinit var scannerView : View
     var selectedProduct : String = ""
-    private lateinit var replyCommunication : String
+    private var replyCommunication : String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,28 +67,44 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         var format : String = LoginActivity.user + "|" + LoginActivity.pwdHash + "|" + actionCode + "|" + selectedProduct + "|" + amount
 
         try{
-            GlobalScope.launch(Dispatchers.Default){
-                interactWithSocket(format)
-            }
 
-            // Tempo di attesa in modo da permettere alle funzionalità di rete di terminare lo scambio
-            // Evita che la variabile replyCommunication risulti non inizializzata
-            Thread.sleep(100)
+            if(selectedProduct != ""){
 
-            val messageFields = replyCommunication.split("|")
-            val response : String = messageFields[0] // Codice intero ricevuto
+                GlobalScope.launch(Dispatchers.Default){
+                    interactWithSocket(format)
+                }
 
-            when (response){
-                "002" ->{
-                    Toast.makeText(requireContext(), "Operazione eseguita", Toast.LENGTH_SHORT).show()
+                // Tempo di attesa in modo da permettere alle funzionalità di rete di terminare lo scambio
+                // Evita che la variabile replyCommunication risulti non inizializzata
+                //Thread.sleep(100)
+                var i = 0
+                while(replyCommunication == "" && i < 100000000){
+                    i++
+                }
+
+                if(replyCommunication != "") {
+                    val messageFields = replyCommunication.split("|")
+                    val response : String = messageFields[0] // Codice intero ricevuto
+
+                    when (response){
+                        "002" ->{
+                            Toast.makeText(requireContext(), "Operazione eseguita", Toast.LENGTH_SHORT).show()
+                            cameraTask()
+                        }
+
+                        else ->{
+                            Toast.makeText(requireContext(), "Errore sconosciuto: operazione annullata", Toast.LENGTH_SHORT).show()
+                            cameraTask()
+                        }
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Errore: nessuna risposta dal server", Toast.LENGTH_SHORT).show()
                     cameraTask()
                 }
 
-                else ->{
-                    Toast.makeText(requireContext(), "Errore sconosciuto: operazione annullata", Toast.LENGTH_SHORT).show()
-                    cameraTask()
-                }
             }
+            selectedProduct = ""
+            replyCommunication = ""
         }catch(ex:Exception){
             Toast.makeText(activity, ex.localizedMessage, Toast.LENGTH_SHORT).show()
         }
@@ -143,6 +158,10 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
 
         Thread.sleep(400)
 
+        while(replyCommunication == ""){
+
+        }
+
         val messageFields = replyCommunication.split("|")
         val response : String = messageFields[0] // Codice intero ricevuto
 
@@ -169,9 +188,14 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
                 scannerView.findViewById<TextView>(R.id.txtProductName).text = ""
                 //Thread.sleep(100)
                 scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = ""
+                scannerView.findViewById<EditText>(R.id.dttAmount).text.clear()
                 Thread.sleep(100)
+
+
             }
         }
+
+        replyCommunication = ""
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -179,6 +203,13 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         if(result != null){
             if(result.contents == null){
                 Toast.makeText(activity, getString(R.string.canceled_scan), Toast.LENGTH_SHORT).show()
+                scannerView.findViewById<TextView>(R.id.txtCode).text = "Product code"
+                //Thread.sleep(100)
+                scannerView.findViewById<TextView>(R.id.txtProductName).text = "Product name"
+                //Thread.sleep(100)
+                scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = "Quantity"
+                scannerView.findViewById<EditText>(R.id.dttAmount).text.clear()
+                Thread.sleep(100)
             }else{
                 try{
                     Toast.makeText(activity, "Successful", Toast.LENGTH_SHORT).show()

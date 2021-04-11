@@ -20,7 +20,7 @@ class AddFragment : Fragment() {
 
     private lateinit var addView : View
     private lateinit var addViewModel: AddViewModel
-    private lateinit var replyCommunication : String // Variabile di passaggio dati tra thread secondario e mainthread
+    private var replyCommunication : String = "" // Variabile di passaggio dati tra thread secondario e mainthread
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -66,13 +66,7 @@ class AddFragment : Fragment() {
         var message : String = ""
 
         // Check of digits number
-        if(productCode?.length  in arrayOf(5, 8, 13)){
-            /*if(productCode?.toIntOrNull() == null){
-                checkSend = false;
-                message += "Il codice deve essere numerico\n"
-            }*/
-        }
-        else{
+        if(productCode?.length !in arrayOf(5, 8, 13)){
             checkSend = false
             message += "Il codice non ha il numero di cifre richieste (5, 8, 13)\n"
         }
@@ -116,6 +110,10 @@ class AddFragment : Fragment() {
                 // Sleep necessario per far terminare le operazioni di rete
                 Thread.sleep(100)
 
+                while(replyCommunication == ""){
+
+                }
+
                 when (replyCommunication) {
                     "002" -> {
                         message = "Dati corretti"
@@ -135,6 +133,8 @@ class AddFragment : Fragment() {
                 var message1 = ex.message
                 Toast.makeText(requireContext(), ex.message.toString(), Toast.LENGTH_LONG).show()
             }
+
+            replyCommunication = ""
 
         }
         else {
