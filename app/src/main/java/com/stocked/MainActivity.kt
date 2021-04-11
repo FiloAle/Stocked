@@ -1,5 +1,6 @@
 package com.stocked
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -24,6 +25,11 @@ class MainActivity : AppCompatActivity(){
 
     companion object {
         lateinit var socket: Socket
+    }
+
+    fun startLoginActivity() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

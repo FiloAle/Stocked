@@ -1,5 +1,6 @@
 package com.stocked.ui.status
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.stocked.ui.LoadingDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Socket
@@ -53,7 +55,7 @@ class StatusFragment : Fragment() {
                     if (MainActivity.socket.isConnected) {
                         GlobalScope.launch(Dispatchers.Main)
                         {
-                            Toast.makeText(activity, "Connected", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(activity, getString(R.string.connected), Toast.LENGTH_SHORT).show()
                             loadingDialog.dismissDialog()
                         }
                     }
@@ -62,15 +64,11 @@ class StatusFragment : Fragment() {
                     {
                         Toast.makeText(
                             activity,
-                            "Not connected, reconnecting...",
+                                getString(R.string.not_connected),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
                     try {
-                        //val txtuser: EditText = root.findViewById(R.id.txtUser)
-                        //val txtpsswd: EditText = root.findViewById(R.id.txtPassword)
-                        //var user: String = txtuser.text.toString()
-                        //var psswd: String = txtpsswd.text.toString()
                         ip = LoginActivity.ip
                         port = LoginActivity.port
 
@@ -83,7 +81,7 @@ class StatusFragment : Fragment() {
                                 if (MainActivity.socket.isConnected) {
                                     GlobalScope.launch(Dispatchers.Main)
                                     {
-                                        Toast.makeText(activity, "Connected", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(activity, getString(R.string.connected), Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             }
@@ -93,17 +91,17 @@ class StatusFragment : Fragment() {
                             {
                                 Toast.makeText(
                                     activity,
-                                    "Destination unreachable",
+                                        getString(R.string.dest_unreachable),
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                //ritornare a login activity *** DA FARE ***
                             }
+                            (activity as MainActivity).startLoginActivity()
                         }
                     } catch (ex: Exception) {
                         GlobalScope.launch(Dispatchers.Main)
                         {
-                            Toast.makeText(activity, "Destination unreachable", Toast.LENGTH_SHORT).show()
-                            //ritornare a login activity *** DA FARE ***
+                            Toast.makeText(activity, getString(R.string.dest_unreachable), Toast.LENGTH_SHORT).show()
+                            (activity as MainActivity).startLoginActivity()
                         }
                     }
                 }

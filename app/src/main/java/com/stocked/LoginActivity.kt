@@ -7,13 +7,17 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.stocked.ui.LoadingDialog
 import kotlinx.coroutines.*
 import java.io.*
+import java.lang.NumberFormatException
 import java.net.Socket
 import java.security.MessageDigest
 import java.util.*
 
 class LoginActivity : AppCompatActivity() {
+
+    private lateinit var loadingDialog: LoadingDialog
 
     private fun startMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
@@ -40,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
         this.supportActionBar?.hide()
         this.window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         this.window.statusBarColor = getColor(R.color.blue_400)
+        loadingDialog = LoadingDialog(this)!!
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -51,6 +56,7 @@ class LoginActivity : AppCompatActivity() {
 
         connectButton.setOnClickListener{
             try {
+                loadingDialog.startLoadingDialog()
                 user = txtuser.text.toString()
                 pwdHash = txtpsswd.text.toString().toMD5()
                 ip = txtip.text.toString()
@@ -59,27 +65,27 @@ class LoginActivity : AppCompatActivity() {
                 GlobalScope.launch(Dispatchers.Default){
                     try {
                         if (ip != "") {
-                            MainActivity.socket = Socket(ip, port)
+                            MainActivity.socket = Socket(ip, port) // *** DA SISTEMARE, è bloccante, se non si connette rimane fermo qui ***
                             var srvReply = "-1" // -1 = not connected
                             val reader = DataInputStream(MainActivity.socket.getInputStream())
-                            val apollo = DataOutputStream(MainActivity.socket.getOutputStream())
-                            apollo.write("check".toByteArray())
-                            apollo.flush()
+                            val writer = DataOutputStream(MainActivity.socket.getOutputStream())
+                            writer.write("check".toByteArray())
+                            writer.flush()
 
                             val d = async {
-                                var msg : ByteArray = ByteArray(1024)
+                                val msg = ByteArray(1024)
                                 reader.read(msg)
                                 srvReply = msg.toString(Charsets.US_ASCII)
-                                val rgx = Regex("[^A-Za-z0-9 |]")
+                                val rgx = Regex("[^A-Za-z0-9 |[-]]")
                                 srvReply = rgx.replace(srvReply, "")
                             }
                             withTimeout(1000) { d.await() }
 
                             if (srvReply != "-1") {
-                                apollo.write("$user|$pwdHash|check".toByteArray())
-                                apollo.flush()
+                                writer.write("$user|$pwdHash|check".toByteArray())
+                                writer.flush()
 
-                                var msg : ByteArray = ByteArray(1024)
+                                val msg = ByteArray(1024)
                                 reader.read(msg)
                                 srvReply = msg.toString(Charsets.US_ASCII)
                                 val rgx = Regex("[^A-Za-z0-9 |]")
@@ -89,32 +95,40 @@ class LoginActivity : AppCompatActivity() {
                                     GlobalScope.launch(Dispatchers.Main) {
                                         startMainActivity()
                                     }
+                                    loadingDialog.dismissDialog()
                                 }
                                 else if(srvReply == "003")
                                 {
-                                    Toast.makeText(this@LoginActivity, "User e/o password errati", Toast.LENGTH_SHORT).show()
+                                    loadingDialog.dismissDialog()
+                                    GlobalScope.launch(Dispatchers.Main) {
+                                        Toast.makeText(this@LoginActivity, getString(R.string.wrong_credentials), Toast.LENGTH_SHORT).show()
+                                    }
                                 }
                             } else {
+                                loadingDialog.dismissDialog()
                                 GlobalScope.launch(Dispatchers.Main){
-                                    Toast.makeText(this@LoginActivity, "Impossibile connettersi al server", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this@LoginActivity, getString(R.string.cant_connect), Toast.LENGTH_SHORT).show()
                                 }
                             }
                         }
                         else
                         {
+                            loadingDialog.dismissDialog()
                             GlobalScope.launch(Dispatchers.Main){
-                                Toast.makeText(this@LoginActivity, "Indirizzo IP non inserito", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@LoginActivity, getString(R.string.missing_ip), Toast.LENGTH_SHORT).show()
                             }
                         }
                     }catch (ex: Exception){
+                        loadingDialog.dismissDialog()
                         GlobalScope.launch(Dispatchers.Main){
                             Toast.makeText(this@LoginActivity, ex.toString(), Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
             }
-            catch (ex: Exception){
-                Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT).show()
+            catch (ex: NumberFormatException){
+                loadingDialog.dismissDialog()
+                Toast.makeText(this, getString(R.string.missing_port), Toast.LENGTH_SHORT).show()
             }
         }
     }

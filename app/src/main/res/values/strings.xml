@@ -34,4 +34,11 @@
     <string name="prd_add">Add</string>
     <string name="prd_remove">Remove</string>
     <string name="send">Send</string>
+    <string name="connected">Connected</string>
+    <string name="not_connected">Not connected, reconnecting…</string>
+    <string name="dest_unreachable">Destination unreachable</string>
+    <string name="wrong_credentials">Incorrect username or password</string>
+    <string name="cant_connect">Unable to connect</string>
+    <string name="missing_ip">Missing IP address</string>
+    <string name="missing_port">Missing server port</string>
 </resources>

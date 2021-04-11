@@ -24,4 +24,11 @@
     <string name="prd_add">Aggiungi</string>
     <string name="prd_remove">Rimuovi</string>
     <string name="send">Invia</string>
+    <string name="connected">Connesso</string>
+    <string name="not_connected">Non connesso, riconnessione…</string>
+    <string name="dest_unreachable">Destinazione non raggiungibile</string>
+    <string name="wrong_credentials">Username o password errati</string>
+    <string name="cant_connect">Impossibile connettersi</string>
+    <string name="missing_ip">Indirizzo IP mancante</string>
+    <string name="missing_port">Porta server mancante</string>
 </resources>
