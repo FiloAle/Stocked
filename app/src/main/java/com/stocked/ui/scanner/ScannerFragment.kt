@@ -7,16 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.google.zxing.integration.android.IntentIntegrator
 import com.stocked.LoginActivity
 import com.stocked.MainActivity
 import com.stocked.R
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.json.JSONException
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.*
+import java.io.DataInputStream
+import java.io.DataOutputStream
 
 const val AC_REMOVE = "remove"
 const val AC_ADD = "add"
@@ -41,35 +43,31 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         return scannerView
     }
 
-    private fun checkAndSend(){
-        lateinit var rdbChecked : RadioButton
-        var actionCode : String? = null
-        var amount : Int? = 0
-        amount = scannerView.findViewById<EditText>(R.id.dttAmount).text.toString().toIntOrNull()
-        if(amount == null || amount <= 0){
-            Toast.makeText(requireContext(), "Invio annullato: inserire una quantità valida.", Toast.LENGTH_SHORT).show()
+    private fun checkAndSend() {
+        val actionCode : String?
+        val amount : Int? = scannerView.findViewById<EditText>(R.id.dttAmount).text.toString().toIntOrNull()
+
+        if (amount == null || amount <= 0) {
+            Toast.makeText(requireContext(), getString(R.string.invalid_quantity), Toast.LENGTH_SHORT).show()
             return
         }
 
-
-        if(scannerView.findViewById<RadioButton>(R.id.rdbRemove).isChecked){
+        if (scannerView.findViewById<RadioButton>(R.id.rdbRemove).isChecked) {
             actionCode = AC_REMOVE
 
             // Controlla che non si tenti di rimuovere una quantità maggiore rispetto a quella disponibile
-            if(scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text.toString().toInt() < amount){
-                Toast.makeText(requireContext(), "Invio annullato: la quantità rimossa non può essere maggiore di quella disponibile.", Toast.LENGTH_LONG).show()
+            if (scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text.toString().toInt() < amount) {
+                Toast.makeText(requireContext(), getString(R.string.exceeding_quantity_removal), Toast.LENGTH_LONG).show()
                 return
             }
-        }else
+        } else
             actionCode = AC_ADD
 
         // Invio dati con modifica, numero indica in più/in meno
-        var format : String = LoginActivity.user + "|" + LoginActivity.pwdHash + "|" + actionCode + "|" + selectedProduct + "|" + amount
+        val format : String = LoginActivity.user + "|" + LoginActivity.pwdHash + "|" + actionCode + "|" + selectedProduct + "|" + amount
 
-        try{
-
-            if(selectedProduct != ""){
-
+        try {
+            if (selectedProduct != "") {
                 GlobalScope.launch(Dispatchers.Default){
                     interactWithSocket(format)
                 }
@@ -78,39 +76,35 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
                 // Evita che la variabile replyCommunication risulti non inizializzata
                 Thread.sleep(400)
 
-                if(replyCommunication != "") {
+                if (replyCommunication != "") {
                     val messageFields = replyCommunication.split("|")
-                    val response : String = messageFields[0] // Codice intero ricevuto
 
-                    when (response){
-                        "002" ->{
-                            Toast.makeText(requireContext(), "Operazione eseguita", Toast.LENGTH_SHORT).show()
+                    when (messageFields[0]) {
+                        "002" -> {
+                            Toast.makeText(requireContext(), getString(R.string.executed_operation), Toast.LENGTH_SHORT).show()
                             cameraTask()
                         }
-
-                        else ->{
-                            Toast.makeText(requireContext(), "Errore sconosciuto: operazione annullata", Toast.LENGTH_SHORT).show()
+                        else -> {
+                            Toast.makeText(requireContext(), getString(R.string.unknown_err), Toast.LENGTH_SHORT).show()
                             cameraTask()
                         }
                     }
                 } else {
-                    Toast.makeText(requireContext(), "Errore: nessuna risposta dal server", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.no_server_response), Toast.LENGTH_SHORT).show()
                     cameraTask()
                 }
-
             }
             selectedProduct = ""
             replyCommunication = ""
-        }catch(ex:Exception){
+        } catch (ex:Exception) {
             Toast.makeText(activity, ex.localizedMessage, Toast.LENGTH_SHORT).show()
         }
-
     }
 
     private fun cameraTask(){
-        if(hasCameraAccess()){
+        if (hasCameraAccess()) {
             IntentIntegrator.forSupportFragment(this).initiateScan();
-        }else{
+        } else {
             EasyPermissions.requestPermissions(
                 this,
                 getString(R.string.cam_perm),
@@ -125,14 +119,14 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
     }
 
     private fun interactWithSocket(format : String) : Unit{
-        val apollo = DataOutputStream(MainActivity.socket.getOutputStream())
-        apollo.write(format.toByteArray())
-        apollo.flush()
+        val writer = DataOutputStream(MainActivity.socket.getOutputStream())
+        writer.write(format.toByteArray())
+        writer.flush()
 
         // Ricezione risposta dal server
         var reply : String
         val reader = DataInputStream(MainActivity.socket.getInputStream())
-        var msg : ByteArray = ByteArray(1024)
+        val msg = ByteArray(1024)
         reader.read(msg)
         reply = msg.toString(Charsets.US_ASCII)
         val rgx = Regex("[^A-Za-z0-9 |]")
@@ -143,9 +137,8 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
     }
 
     private fun verifyCode(varCode : String){
-
         // Invio pacchetto dati di aggiunta
-        var format : String = LoginActivity.user + "|" + LoginActivity.pwdHash + "|" + AC_SELECT + "|" + varCode
+        val format : String = LoginActivity.user + "|" + LoginActivity.pwdHash + "|" + AC_SELECT + "|" + varCode
 
         // Utilizzo un dispatcher per utilizzare le funzionalità di rete
         GlobalScope.launch(Dispatchers.Default){
@@ -156,10 +149,8 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
 
         if(replyCommunication != ""){
             val messageFields = replyCommunication.split("|")
-            val response : String = messageFields[0] // Codice intero ricevuto
 
-
-            when (response) {
+            when (messageFields[0]) {
                 "002" -> {
                     // Valorizzazione dei textview
                     // Gli sleep sono necessari per dare il tempo al sistema di aggiornare correttamente l'interfaccia
@@ -172,19 +163,16 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
                 }
                 "005" -> {
                     // Prodotto non presente
-                    Toast.makeText(requireContext(), "Non trovato", Toast.LENGTH_SHORT)
-                    scannerView.findViewById<TextView>(R.id.txtCode).text = "Non trovato"
+                    scannerView.findViewById<TextView>(R.id.txtCode).text = getString(R.string.not_found)
                     scannerView.findViewById<TextView>(R.id.txtProductName).text = ""
                     scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = ""
                     scannerView.findViewById<EditText>(R.id.dttAmount).text.clear()
                     Thread.sleep(100)
-
-
                 }
             }
         }
-        else{
-            Toast.makeText(requireContext(), "Errore: nessuna risposta dal server", Toast.LENGTH_SHORT).show()
+        else {
+            Toast.makeText(requireContext(), getString(R.string.no_server_response), Toast.LENGTH_SHORT).show()
             cameraTask()
         }
 
@@ -193,36 +181,30 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if(result != null){
-            if(result.contents == null){
+        if (result != null) {
+            if (result.contents == null) {
                 Toast.makeText(activity, getString(R.string.canceled_scan), Toast.LENGTH_SHORT).show()
-                scannerView.findViewById<TextView>(R.id.txtCode).text = "Product code"
-                //Thread.sleep(100)
-                scannerView.findViewById<TextView>(R.id.txtProductName).text = "Product name"
-                //Thread.sleep(100)
-                scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = "Quantity"
+                scannerView.findViewById<TextView>(R.id.txtCode).text = getString(R.string.prd_code)
+                scannerView.findViewById<TextView>(R.id.txtProductName).text = getString(R.string.prd_name)
+                scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = getString(R.string.prd_quantity)
                 scannerView.findViewById<EditText>(R.id.dttAmount).text.clear()
                 Thread.sleep(100)
-            }else{
-                try{
-                    Toast.makeText(activity, "Successful", Toast.LENGTH_SHORT).show()
-
+            } else {
+                try {
                     // Verifica del codice scannerizzato e ricezione della risposta dal server
                     verifyCode(result.contents)
-
                     scannerView.findViewById<RadioButton>(R.id.rdbAdd).isChecked = true
-
-                }catch (exception: JSONException){
+                } catch (exception: JSONException) {
                     Toast.makeText(activity, exception.localizedMessage, Toast.LENGTH_SHORT).show()
-                }catch(ex: Exception){
+                } catch (ex: Exception) {
                     Toast.makeText(activity, ex.localizedMessage, Toast.LENGTH_SHORT).show()
                 }
             }
-        }else{
+        } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
 
-        if(requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE){
+        if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
             Toast.makeText(activity, getString(R.string.cam_perm_granted), Toast.LENGTH_SHORT).show()
         }
     }

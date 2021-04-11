@@ -44,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
         this.supportActionBar?.hide()
         this.window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         this.window.statusBarColor = getColor(R.color.blue_400)
-        loadingDialog = LoadingDialog(this)!!
+        loadingDialog = LoadingDialog(this)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)

@@ -8,18 +8,18 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.stocked.LoginActivity
 import com.stocked.MainActivity
 import com.stocked.R
-import kotlinx.coroutines.*
-import java.io.*
-import java.lang.Runnable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.io.DataInputStream
+import java.io.DataOutputStream
 
 class AddFragment : Fragment() {
 
     private lateinit var addView : View
-    private lateinit var addViewModel: AddViewModel
     private var replyCommunication : String = "" // Variabile di passaggio dati tra thread secondario e mainthread
 
     override fun onCreateView(
@@ -27,7 +27,6 @@ class AddFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        addViewModel = ViewModelProvider(this).get(AddViewModel::class.java)
         addView = inflater.inflate(R.layout.fragment_add, container, false)
 
         val send : Button = addView.findViewById(R.id.btnAdd)

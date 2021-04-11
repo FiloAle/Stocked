@@ -41,4 +41,10 @@
     <string name="cant_connect">Unable to connect</string>
     <string name="missing_ip">Missing IP address</string>
     <string name="missing_port">Missing server port</string>
+    <string name="invalid_quantity">Enter a valid product quantity</string>
+    <string name="exceeding_quantity_removal">The quantity you are tempting to remove exceeds the amount of items available</string>
+    <string name="executed_operation">Operation executed succesfully</string>
+    <string name="unknown_err">Unknown error</string>
+    <string name="no_server_response">The server hasn\'t replied in time</string>
+    <string name="not_found">Not found</string>
 </resources>
