@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.google.zxing.integration.android.IntentIntegrator
 import com.stocked.LoginActivity
 import com.stocked.MainActivity
@@ -50,8 +51,16 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
             Toast.makeText(requireContext(), "Invio annullato: inserire una quantità valida.", Toast.LENGTH_SHORT).show()
             return
         }
+
+
         if(scannerView.findViewById<RadioButton>(R.id.rdbRemove).isChecked){
             actionCode = AC_REMOVE
+
+            // Controlla che non si tenti di rimuovere una quantità maggiore rispetto a quella disponibile
+            if(scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text.toString().toInt() < amount){
+                Toast.makeText(requireContext(), "Invio annullato: la quantità rimossa non può essere maggiore di quella disponibile.", Toast.LENGTH_LONG).show()
+                return
+            }
         }else
             actionCode = AC_ADD
 
@@ -142,27 +151,25 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
             "002" -> {
                 // Valorizzazione dei textview
                 // Gli sleep sono necessari per dare il tempo al sistema di aggiornare correttamente l'interfaccia
+                selectedProduct = messageFields[1] // Importante, non eliminare
                 scannerView.findViewById<TextView>(R.id.txtCode).text = messageFields[1]
-                Thread.sleep(100)
+                //Thread.sleep(100)
                 scannerView.findViewById<TextView>(R.id.txtProductName).text = messageFields[2]
-                Thread.sleep(100)
+                //Thread.sleep(100)
                 scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = messageFields[3]
-                Thread.sleep(100)
+                //Thread.sleep(100)
                 scannerView.findViewById<EditText>(R.id.dttAmount).text.clear()
                 Thread.sleep(100)
             }
             "005" -> {
                 // Prodotto non presente
-                // Transizione all'add fragment ????????
-                Toast.makeText(requireContext(), "non trovato", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), "Non trovato", Toast.LENGTH_SHORT)
                 scannerView.findViewById<TextView>(R.id.txtCode).text = "Non trovato"
+                //Thread.sleep(100)
+                scannerView.findViewById<TextView>(R.id.txtProductName).text = ""
+                //Thread.sleep(100)
+                scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = ""
                 Thread.sleep(100)
-                scannerView.findViewById<TextView>(R.id.txtProductName).text = "Non trovato"
-                Thread.sleep(100)
-                scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = "Non trovato"
-                Thread.sleep(100)
-
-
             }
         }
     }
