@@ -23,6 +23,7 @@
         android:id="@+id/txtLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/productsansreg"
         android:text="@string/loading_msg"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

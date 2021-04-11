@@ -15,7 +15,7 @@
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_marginTop="64dp"
-            android:fontFamily="@font/montserrat"
+            android:fontFamily="@font/productsansreg"
             android:maxLines="1"
             android:text="@string/prd_code"
             android:textAlignment="center"
@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_marginTop="32dp"
-            android:fontFamily="@font/montserrat"
+            android:fontFamily="@font/productsansreg"
             android:text="@string/prd_name"
             android:textAlignment="center"
             android:textSize="18sp"
@@ -42,7 +42,7 @@
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/montserrat"
+            android:fontFamily="@font/productsansreg"
             android:text="@string/prd_quantity"
             android:textAlignment="center"
             android:textSize="18sp"
@@ -62,7 +62,7 @@
             android:drawablePadding="6dp"
             android:drawableTint="@color/blue_400"
             android:ems="10"
-            android:fontFamily="@font/montserrat"
+            android:fontFamily="@font/productsansreg"
             android:hint="@string/prd_quantity"
             android:inputType="number"
             android:padding="8dp"
@@ -78,7 +78,7 @@
             android:layout_marginTop="65dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/round_bg"
-            android:fontFamily="@font/montserrat"
+            android:fontFamily="@font/productsansbold"
             android:text="@string/send"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -100,14 +100,14 @@
                 android:id="@+id/rdbAdd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat"
+                android:fontFamily="@font/productsansreg"
                 android:text="@string/prd_add" />
 
             <RadioButton
                 android:id="@+id/rdbRemove"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat"
+                android:fontFamily="@font/productsansreg"
                 android:text="@string/prd_remove" />
         </RadioGroup>
 

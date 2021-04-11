@@ -12,6 +12,9 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <item name="fontFamily">@font/productsansreg</item>
+        <item name="fontFamily" tools:ignore="DuplicateDefinition">@font/productsansreg</item> <!-- target android sdk versions < 26 and > 14 if theme other than AppCompat -->
     </style>
 
     <style name="Theme.Stocked.NoActionBar">
