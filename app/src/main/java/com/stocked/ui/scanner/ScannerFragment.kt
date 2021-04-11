@@ -7,12 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import com.google.zxing.integration.android.IntentIntegrator
 import com.stocked.LoginActivity
 import com.stocked.MainActivity
 import com.stocked.R
-import com.stocked.ui.add.AddFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
