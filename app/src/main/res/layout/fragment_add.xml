@@ -11,22 +11,22 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/round_bg"
         android:fontFamily="@font/productsansbold"
         android:text="@string/menu_add"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dttProductQuantity" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/dttCode"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="96dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/round_border"
         android:drawableStart="@drawable/ic_round_inventory_24"

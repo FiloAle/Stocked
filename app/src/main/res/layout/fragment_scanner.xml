@@ -1,91 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     tools:context=".ui.scanner.ScannerFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/txtCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/productsansreg"
+        android:maxLines="1"
+        android:text="@string/prd_code"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgAdd2" />
 
-        <TextView
-            android:id="@+id/txtCode"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="64dp"
-            android:fontFamily="@font/productsansreg"
-            android:maxLines="1"
-            android:text="@string/prd_code"
-            android:textAlignment="center"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/txtProductName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/productsansreg"
+        android:text="@string/prd_name"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtCode" />
 
-        <TextView
-            android:id="@+id/txtProductName"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="32dp"
-            android:fontFamily="@font/productsansreg"
-            android:text="@string/prd_name"
-            android:textAlignment="center"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtCode" />
+    <TextView
+        android:id="@+id/txtAvailableProducts"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/productsansreg"
+        android:text="@string/prd_quantity"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtProductName" />
 
-        <TextView
-            android:id="@+id/txtAvailableProducts"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/productsansreg"
-            android:text="@string/prd_quantity"
-            android:textAlignment="center"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtProductName" />
+    <EditText
+        android:id="@+id/dttAmount"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/round_border"
+        android:drawableStart="@drawable/ic_round_quantity_24"
+        android:drawablePadding="6dp"
+        android:drawableTint="@color/blue_400"
+        android:ems="10"
+        android:fontFamily="@font/productsansreg"
+        android:hint="@string/prd_quantity"
+        android:inputType="number"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rdgRadioButton" />
 
-        <EditText
-            android:id="@+id/dttAmount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/round_border"
-            android:drawableStart="@drawable/ic_round_quantity_24"
-            android:drawablePadding="6dp"
-            android:drawableTint="@color/blue_400"
-            android:ems="10"
-            android:fontFamily="@font/productsansreg"
-            android:hint="@string/prd_quantity"
-            android:inputType="number"
-            android:padding="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rdgRadioButton" />
+    <Button
+        android:id="@+id/btnSend"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/round_bg"
+        android:fontFamily="@font/productsansbold"
+        android:text="@string/send"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/btnSend"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="65dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/round_bg"
-            android:fontFamily="@font/productsansbold"
-            android:text="@string/send"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dttAmount" />
+    <View
+        android:id="@+id/imgAdd2"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="64dp"
+        android:background="@drawable/ic_round_qr_code_scanner_24"
+        android:backgroundTint="@color/blue_400"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <RadioGroup
+    <RadioGroup
             android:id="@+id/rdgRadioButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -112,6 +119,3 @@
         </RadioGroup>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</FrameLayout>
