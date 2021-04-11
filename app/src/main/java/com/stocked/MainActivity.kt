@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -57,12 +58,7 @@ class MainActivity : AppCompatActivity(){
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Replace toast.show with an action
         when (item.itemId) {
-            R.id.action_settings -> {
-                Toast.makeText(this, getString(R.string.action_settings), Toast.LENGTH_SHORT).show()
-                return true
-            }
             R.id.nav_scanner -> {
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()

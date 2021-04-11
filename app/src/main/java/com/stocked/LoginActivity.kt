@@ -65,7 +65,11 @@ class LoginActivity : AppCompatActivity() {
                 GlobalScope.launch(Dispatchers.Default){
                     try {
                         if (ip != "") {
-                            MainActivity.socket = Socket(ip, port) // *** DA SISTEMARE, è bloccante, se non si connette rimane fermo qui ***
+                            val f = async {
+                                MainActivity.socket = Socket(ip, port)
+                            }
+                            withTimeout(2500){ f.await() }
+
                             var srvReply = "-1" // -1 = not connected
                             val reader = DataInputStream(MainActivity.socket.getInputStream())
                             val writer = DataOutputStream(MainActivity.socket.getOutputStream())
@@ -121,7 +125,7 @@ class LoginActivity : AppCompatActivity() {
                     }catch (ex: Exception){
                         loadingDialog.dismissDialog()
                         GlobalScope.launch(Dispatchers.Main){
-                            Toast.makeText(this@LoginActivity, ex.toString(), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@LoginActivity, getString(R.string.dest_unreachable), Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

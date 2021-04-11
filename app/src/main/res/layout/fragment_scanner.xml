@@ -43,7 +43,7 @@
             android:layout_height="30dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/montserrat"
-            android:text="TextView"
+            android:text="@string/prd_quantity"
             android:textAlignment="center"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
