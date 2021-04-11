@@ -76,11 +76,7 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
 
                 // Tempo di attesa in modo da permettere alle funzionalità di rete di terminare lo scambio
                 // Evita che la variabile replyCommunication risulti non inizializzata
-                //Thread.sleep(100)
-                var i = 0
-                while(replyCommunication == "" && i < 100000000){
-                    i++
-                }
+                Thread.sleep(400)
 
                 if(replyCommunication != "") {
                     val messageFields = replyCommunication.split("|")
@@ -158,41 +154,38 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
 
         Thread.sleep(400)
 
-        while(replyCommunication == ""){
+        if(replyCommunication != ""){
+            val messageFields = replyCommunication.split("|")
+            val response : String = messageFields[0] // Codice intero ricevuto
 
+
+            when (response) {
+                "002" -> {
+                    // Valorizzazione dei textview
+                    // Gli sleep sono necessari per dare il tempo al sistema di aggiornare correttamente l'interfaccia
+                    selectedProduct = messageFields[1] // Importante, non eliminare
+                    scannerView.findViewById<TextView>(R.id.txtCode).text = messageFields[1]
+                    scannerView.findViewById<TextView>(R.id.txtProductName).text = messageFields[2]
+                    scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = messageFields[3]
+                    scannerView.findViewById<EditText>(R.id.dttAmount).text.clear()
+                    Thread.sleep(100)
+                }
+                "005" -> {
+                    // Prodotto non presente
+                    Toast.makeText(requireContext(), "Non trovato", Toast.LENGTH_SHORT)
+                    scannerView.findViewById<TextView>(R.id.txtCode).text = "Non trovato"
+                    scannerView.findViewById<TextView>(R.id.txtProductName).text = ""
+                    scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = ""
+                    scannerView.findViewById<EditText>(R.id.dttAmount).text.clear()
+                    Thread.sleep(100)
+
+
+                }
+            }
         }
-
-        val messageFields = replyCommunication.split("|")
-        val response : String = messageFields[0] // Codice intero ricevuto
-
-
-        when (response) {
-            "002" -> {
-                // Valorizzazione dei textview
-                // Gli sleep sono necessari per dare il tempo al sistema di aggiornare correttamente l'interfaccia
-                selectedProduct = messageFields[1] // Importante, non eliminare
-                scannerView.findViewById<TextView>(R.id.txtCode).text = messageFields[1]
-                //Thread.sleep(100)
-                scannerView.findViewById<TextView>(R.id.txtProductName).text = messageFields[2]
-                //Thread.sleep(100)
-                scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = messageFields[3]
-                //Thread.sleep(100)
-                scannerView.findViewById<EditText>(R.id.dttAmount).text.clear()
-                Thread.sleep(100)
-            }
-            "005" -> {
-                // Prodotto non presente
-                Toast.makeText(requireContext(), "Non trovato", Toast.LENGTH_SHORT)
-                scannerView.findViewById<TextView>(R.id.txtCode).text = "Non trovato"
-                //Thread.sleep(100)
-                scannerView.findViewById<TextView>(R.id.txtProductName).text = ""
-                //Thread.sleep(100)
-                scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = ""
-                scannerView.findViewById<EditText>(R.id.dttAmount).text.clear()
-                Thread.sleep(100)
-
-
-            }
+        else{
+            Toast.makeText(requireContext(), "Errore: nessuna risposta dal server", Toast.LENGTH_SHORT).show()
+            cameraTask()
         }
 
         replyCommunication = ""
