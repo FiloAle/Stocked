@@ -48,7 +48,7 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         val actionCode : String?
         val amount : Int? = scannerView.findViewById<EditText>(R.id.dttAmount).text.toString().toIntOrNull()
         if(!found){
-            Toast.makeText(requireContext(), "Invio annullato: il prodotto non è nel database", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), getString(R.string.not_found), Toast.LENGTH_LONG).show()
             return
         }
 

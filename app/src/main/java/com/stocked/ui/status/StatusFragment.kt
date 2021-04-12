@@ -60,6 +60,7 @@ class StatusFragment : Fragment() {
                         txtStatus.text = getString(R.string.connected) + " " + getString(R.string.to) + " " + ip
                         GlobalScope.launch(Dispatchers.Main)
                         {
+                            Toast.makeText(activity, getString(R.string.connected) + " " + getString(R.string.to) + " " + ip, Toast.LENGTH_SHORT).show()
                             loadingDialog.dismissDialog()
                         }
                     }

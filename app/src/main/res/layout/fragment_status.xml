@@ -44,9 +44,11 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="24dp"
+            android:fontFamily="@font/productsansreg"
             android:text="@string/connected"
             android:textAlignment="center"
             android:textSize="24sp"
+            android:typeface="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imgStatus" />
