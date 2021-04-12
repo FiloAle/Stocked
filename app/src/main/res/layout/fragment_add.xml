@@ -56,6 +56,7 @@
         android:ems="10"
         android:fontFamily="@font/productsansreg"
         android:hint="@string/prd_name"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_,() "
         android:inputType="textPersonName"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
