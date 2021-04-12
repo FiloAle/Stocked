@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.accessibility.AccessibilityManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -46,7 +45,7 @@ class AddFragment : Fragment() {
 
         // Ricezione risposta dal server
         val reader = DataInputStream(MainActivity.socket.getInputStream())
-        val msg : ByteArray = ByteArray(1024)
+        val msg = ByteArray(1024)
         reader.read(msg)
         var reply = msg.toString(Charsets.US_ASCII)
         val rgx = Regex("[^A-Za-z0-9 |]")
@@ -62,22 +61,22 @@ class AddFragment : Fragment() {
         val productName : String = addView.findViewById<EditText>(R.id.dttProductName).text.toString()
         val productAmount : String = addView.findViewById<EditText>(R.id.dttProductQuantity).text.toString()
 
-        if(productName == ""){
-            Toast.makeText(requireContext(), "Inserire il nome del prodotto", Toast.LENGTH_SHORT).show()
+        if (productName == "") {
+            Toast.makeText(requireContext(), getString(R.string.missing_prd_name), Toast.LENGTH_SHORT).show()
             return
         } else {
-            if(productAmount.length.compareTo(0) == 1){
-                if(productAmount.toIntOrNull() != null && productAmount.toInt() < 0){
-                    Toast.makeText(requireContext(), "Quantità deve essere positiva", Toast.LENGTH_SHORT).show()
+            if (productAmount.length.compareTo(0) == 1) {
+                if(productAmount.toIntOrNull() != null && productAmount.toInt() < 0) {
+                    Toast.makeText(requireContext(), getString(R.string.invalid_quantity), Toast.LENGTH_SHORT).show()
                     return
                 }
-                else if (productAmount.toIntOrNull() == null){
-                    Toast.makeText(requireContext(), "La quantità deve essere intera", Toast.LENGTH_SHORT).show()
+                else if (productAmount.toIntOrNull() == null) {
+                    Toast.makeText(requireContext(), getString(R.string.invalid_quantity), Toast.LENGTH_SHORT).show()
                     return
                 }
             }
-            else{
-                Toast.makeText(requireContext(), "Inserire una quantità", Toast.LENGTH_SHORT).show()
+            else {
+                Toast.makeText(requireContext(), getString(R.string.invalid_quantity), Toast.LENGTH_SHORT).show()
                 return
             }
         }
@@ -88,7 +87,7 @@ class AddFragment : Fragment() {
 
             // Utilizzo un altro thread per utilizzare le funzionalità di rete in quanto non possono essere eseguite
             // nel main thread
-            GlobalScope.launch(Dispatchers.Default){
+            GlobalScope.launch (Dispatchers.Default) {
                 interactWithSocket(format)
             }
 
@@ -97,23 +96,22 @@ class AddFragment : Fragment() {
 
             when (replyCommunication) {
                 "002" -> {
-                    Toast.makeText(requireContext(), "Invio riuscito", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.executed_operation), Toast.LENGTH_SHORT).show()
                 }
                 "006" -> {
-                    Toast.makeText(requireContext(), "Nome prodotto già presente", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.already_existing_prd_name), Toast.LENGTH_SHORT).show()
                 }
                 "007" -> {
-                    Toast.makeText(requireContext(), "Codice prodotto già presente", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.already_existing_prd_code), Toast.LENGTH_SHORT).show()
                 }
                 else -> {
-                    Toast.makeText(requireContext(), "Operazione Rifiutata", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.rejected_operation), Toast.LENGTH_SHORT).show()
                 }
             }
-        }catch (ex: Exception){
+        }catch (ex: Exception) {
             Toast.makeText(requireContext(), ex.toString(), Toast.LENGTH_LONG).show()
         }
 
         replyCommunication = ""
-
     }
 }

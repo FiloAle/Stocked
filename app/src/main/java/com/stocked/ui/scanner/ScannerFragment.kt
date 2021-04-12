@@ -47,7 +47,7 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
     private fun checkAndSend() {
         val actionCode : String?
         val amount : Int? = scannerView.findViewById<EditText>(R.id.dttAmount).text.toString().toIntOrNull()
-        if(!found){
+        if (!found) {
             Toast.makeText(requireContext(), getString(R.string.not_found), Toast.LENGTH_LONG).show()
             return
         }
@@ -73,7 +73,7 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
 
         try {
             if (selectedProduct != "") {
-                GlobalScope.launch(Dispatchers.Default){
+                GlobalScope.launch (Dispatchers.Default) {
                     interactWithSocket(format)
                 }
 
@@ -106,7 +106,7 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         }
     }
 
-    private fun cameraTask(){
+    private fun cameraTask() {
         if (hasCameraAccess()) {
             IntentIntegrator.forSupportFragment(this).initiateScan();
         } else {
@@ -119,11 +119,11 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         }
     }
 
-    private fun hasCameraAccess() : Boolean{
+    private fun hasCameraAccess() : Boolean {
         return EasyPermissions.hasPermissions(requireActivity(), android.Manifest.permission.CAMERA)
     }
 
-    private fun interactWithSocket(format : String) : Unit{
+    private fun interactWithSocket(format : String) {
         val writer = DataOutputStream(MainActivity.socket.getOutputStream())
         writer.write(format.toByteArray())
         writer.flush()
@@ -141,18 +141,18 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         return
     }
 
-    private fun verifyCode(varCode : String){
+    private fun verifyCode(varCode : String) {
         // Invio pacchetto dati di aggiunta
         val format : String = LoginActivity.user + "|" + LoginActivity.pwdHash + "|" + AC_SELECT + "|" + varCode
 
         // Utilizzo un dispatcher per utilizzare le funzionalità di rete
-        GlobalScope.launch(Dispatchers.Default){
+        GlobalScope.launch (Dispatchers.Default) {
             interactWithSocket(format)
         }
 
         Thread.sleep(400)
 
-        if(replyCommunication != ""){
+        if (replyCommunication != "") {
             val messageFields = replyCommunication.split("|")
             selectedProduct = messageFields[1] // Importante, non eliminare
             when (messageFields[0]) {
@@ -234,7 +234,7 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-        if(EasyPermissions.somePermissionPermanentlyDenied(this, perms)){
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             AppSettingsDialog.Builder(this).build().show()
         }
     }

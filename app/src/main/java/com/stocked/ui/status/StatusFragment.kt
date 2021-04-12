@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Socket
-import kotlin.properties.Delegates
 
 class StatusFragment : Fragment() {
 

@@ -46,4 +46,8 @@
     <string name="not_found">Not found</string>
     <string name="to">to</string>
     <string name="not_scanned">Not scanned</string>
+    <string name="missing_prd_name">Missing product name</string>
+    <string name="already_existing_prd_name">The inserted product name already exists</string>
+    <string name="already_existing_prd_code">The inserted product code already exists</string>
+    <string name="rejected_operation">The operation got rejected</string>
 </resources>

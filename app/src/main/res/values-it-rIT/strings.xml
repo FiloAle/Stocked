@@ -37,4 +37,8 @@
     <string name="not_found">Non trovato</string>
     <string name="to">a</string>
     <string name="not_scanned">Non scannerizzato</string>
+    <string name="missing_prd_name">Nome prodotto mancante</string>
+    <string name="already_existing_prd_name">Nome prodotto già esistente</string>
+    <string name="already_existing_prd_code">Codice prodotto già esistente</string>
+    <string name="rejected_operation">Operazione rifiutata</string>
 </resources>
