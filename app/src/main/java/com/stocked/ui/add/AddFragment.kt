@@ -62,7 +62,7 @@ class AddFragment : Fragment() {
         val productAmount : String = addView.findViewById<EditText>(R.id.dttProductQuantity).text.toString()
 
         if (productCode == ""){
-            Toast.makeText(requireContext(), "codice prodotto mancante", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.missing_prd_code), Toast.LENGTH_SHORT).show()
             return
         } else if (productName == "") {
             Toast.makeText(requireContext(), getString(R.string.missing_prd_name), Toast.LENGTH_SHORT).show()

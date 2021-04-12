@@ -41,4 +41,5 @@
     <string name="already_existing_prd_name">Nome prodotto già esistente</string>
     <string name="already_existing_prd_code">Codice prodotto già esistente</string>
     <string name="rejected_operation">Operazione rifiutata</string>
+    <string name="missing_prd_code">Codice prodotto mancante</string>
 </resources>
