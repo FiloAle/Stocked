@@ -190,9 +190,9 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         if (result != null) {
             if (result.contents == null) {
                 Toast.makeText(activity, getString(R.string.canceled_scan), Toast.LENGTH_SHORT).show()
-                scannerView.findViewById<TextView>(R.id.txtCode).text = getString(R.string.prd_code)
-                scannerView.findViewById<TextView>(R.id.txtProductName).text = getString(R.string.prd_name)
-                scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = getString(R.string.prd_quantity)
+                scannerView.findViewById<TextView>(R.id.txtCode).text = getString(R.string.not_scanned)
+                scannerView.findViewById<TextView>(R.id.txtProductName).text = ""
+                scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = ""
                 scannerView.findViewById<EditText>(R.id.dttAmount).text.clear()
                 Thread.sleep(100)
             } else {
