@@ -29,7 +29,7 @@
     <string name="cant_connect">Impossibile connettersi</string>
     <string name="missing_ip">Indirizzo IP mancante</string>
     <string name="missing_port">Porta server mancante</string>
-    <string name="invalid_quantity">Inserisci una quantità valida</string>
+    <string name="invalid_quantity">Quantità mancante o non valida</string>
     <string name="exceeding_quantity_removal">La quantità da rimuovere supera il numero di elementi presenti</string>
     <string name="executed_operation">Operazione eseguita</string>
     <string name="unknown_err">Errore sconosciuto</string>
