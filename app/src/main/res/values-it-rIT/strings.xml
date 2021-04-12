@@ -42,4 +42,5 @@
     <string name="already_existing_prd_code">Codice prodotto già esistente</string>
     <string name="rejected_operation">Operazione rifiutata</string>
     <string name="missing_prd_code">Codice prodotto mancante</string>
+    <string name="not_found_add_new_prd">Aggiungi un prodotto non ancora esistente attraverso l\'apposita sezione</string>
 </resources>

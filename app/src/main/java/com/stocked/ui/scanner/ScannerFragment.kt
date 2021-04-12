@@ -48,7 +48,7 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
         val actionCode : String?
         val amount : Int? = scannerView.findViewById<EditText>(R.id.dttAmount).text.toString().toIntOrNull()
         if (!found) {
-            Toast.makeText(requireContext(), getString(R.string.not_found), Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), getString(R.string.not_found_add_new_prd), Toast.LENGTH_LONG).show()
             return
         }
 

@@ -51,4 +51,5 @@
     <string name="already_existing_prd_code">The inserted product code already exists</string>
     <string name="rejected_operation">The operation got rejected</string>
     <string name="missing_prd_code">Missing product code</string>
+    <string name="not_found_add_new_prd">Add a non-existing product via the dedicated section</string>
 </resources>
