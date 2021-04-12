@@ -29,6 +29,7 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
     lateinit var scannerView : View
     var selectedProduct : String = ""
     private var replyCommunication : String = ""
+    private var found : Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +47,10 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
     private fun checkAndSend() {
         val actionCode : String?
         val amount : Int? = scannerView.findViewById<EditText>(R.id.dttAmount).text.toString().toIntOrNull()
+        if(!found){
+            Toast.makeText(requireContext(), "Invio annullato: il prodotto non è nel database", Toast.LENGTH_LONG).show()
+            return
+        }
 
         if (amount == null || amount <= 0) {
             Toast.makeText(requireContext(), getString(R.string.invalid_quantity), Toast.LENGTH_SHORT).show()
@@ -149,24 +154,25 @@ class ScannerFragment : Fragment(), EasyPermissions.PermissionCallbacks, EasyPer
 
         if(replyCommunication != ""){
             val messageFields = replyCommunication.split("|")
-
+            selectedProduct = messageFields[1] // Importante, non eliminare
             when (messageFields[0]) {
                 "002" -> {
                     // Valorizzazione dei textview
                     // Gli sleep sono necessari per dare il tempo al sistema di aggiornare correttamente l'interfaccia
-                    selectedProduct = messageFields[1] // Importante, non eliminare
                     scannerView.findViewById<TextView>(R.id.txtCode).text = messageFields[1]
                     scannerView.findViewById<TextView>(R.id.txtProductName).text = messageFields[2]
                     scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = messageFields[3]
                     scannerView.findViewById<EditText>(R.id.dttAmount).text.clear()
+                    found = true
                     Thread.sleep(100)
                 }
                 "005" -> {
                     // Prodotto non presente
-                    scannerView.findViewById<TextView>(R.id.txtCode).text = getString(R.string.not_found)
-                    scannerView.findViewById<TextView>(R.id.txtProductName).text = ""
+                    scannerView.findViewById<TextView>(R.id.txtCode).text = selectedProduct
+                    scannerView.findViewById<TextView>(R.id.txtProductName).text = getString(R.string.not_found)
                     scannerView.findViewById<TextView>(R.id.txtAvailableProducts).text = ""
                     scannerView.findViewById<EditText>(R.id.dttAmount).text.clear()
+                    found = false
                     Thread.sleep(100)
                 }
             }
