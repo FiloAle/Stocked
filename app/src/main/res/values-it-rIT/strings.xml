@@ -36,4 +36,5 @@
     <string name="no_server_response">Nessuna risposta dal server</string>
     <string name="not_found">Non trovato</string>
     <string name="to">a</string>
+    <string name="not_scanned">Non scannerizzato</string>
 </resources>

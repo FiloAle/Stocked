@@ -45,4 +45,5 @@
     <string name="no_server_response">The server hasn\'t replied in time</string>
     <string name="not_found">Not found</string>
     <string name="to">to</string>
+    <string name="not_scanned">Not scanned</string>
 </resources>
