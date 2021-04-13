@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity(){
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         when (item.itemId) {
             R.id.nav_scanner -> {
                 val fragmentManager = supportFragmentManager
@@ -76,5 +75,14 @@ class MainActivity : AppCompatActivity(){
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onDestroy() {
+        try {
+            socket.close()
+        }
+        catch (ex: Exception) { }
+
+        super.onDestroy()
     }
 }

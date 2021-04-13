@@ -23,6 +23,7 @@ import java.net.Socket
 class StatusFragment : Fragment() {
 
     private lateinit var btnCheck: Button
+    private lateinit var btnLogout: Button
     private lateinit var loadingDialog: LoadingDialog
     private lateinit var txtStatus: TextView
     private val ip : String = LoginActivity.ip
@@ -38,6 +39,7 @@ class StatusFragment : Fragment() {
 
         loadingDialog = activity?.let { LoadingDialog(it) }!!
         btnCheck = root.findViewById(R.id.btnCheck)
+        btnLogout = root.findViewById(R.id.btnLogout)
         txtStatus = root.findViewById(R.id.txtStatus)
         txtStatus.text = getString(R.string.connected) + " " + getString(R.string.to) + " " + ip
         btnCheck.setOnClickListener {
@@ -108,6 +110,12 @@ class StatusFragment : Fragment() {
                 }
             }
         }
+
+        btnLogout.setOnClickListener {
+            (activity as MainActivity).startLoginActivity()
+            (activity as MainActivity).finish()
+        }
+
         return root
     }
 }
